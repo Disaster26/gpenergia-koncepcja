@@ -1,0 +1,25 @@
+# GP ENERGIA sp. z o.o.
+
+> Polish B2B supplier of industrial automation and electrical components (PLCs, HMIs, sensors, contactors, power supplies, switchgear, cabinets), sourced to customer BOM lists and shipped from a warehouse near Wrocław to Europe, the United States, Asia, the Middle East and Africa. Independent supplier, in the electrical trade since 2009.
+
+- E-mail: info@gpenergia.com.pl
+- Warehouse: ul. Polna 29, 55-095 Długołęka, Poland
+- KRS 0000344186, NIP 966-201-77-48, REGON 200320804
+- Quotes often within 1-6 hours; orders from about EUR 100 to BOMs worth several hundred thousand euros; Incoterms EXW, FCA, DAP; languages English, Polish, Russian
+
+## Pages
+- [Services](https://gpenergia.com.pl/services/): BOM sourcing, obsolete parts, project supply, logistics and export
+- [BOM sourcing](https://gpenergia.com.pl/services/bom-sourcing/)
+- [Obsolete and discontinued parts](https://gpenergia.com.pl/services/obsolete-parts/)
+- [Project supply](https://gpenergia.com.pl/services/project-supply/)
+- [Logistics and export](https://gpenergia.com.pl/services/logistics-export/)
+- [Products](https://gpenergia.com.pl/products/) and [brands](https://gpenergia.com.pl/brands/)
+- [References](https://gpenergia.com.pl/references/)
+- [About and history](https://gpenergia.com.pl/about/)
+- [Contact and request for quote](https://gpenergia.com.pl/contact/)
+- Polish version: https://gpenergia.com.pl/pl/
+
+## Blog
+- [BOM sourcing: what to include in your request to get an accurate quote fast](https://gpenergia.com.pl/blog/bom-request-for-quote-checklist/)
+- [Lead times for industrial components in 2026: how to plan purchases](https://gpenergia.com.pl/blog/industrial-component-lead-times-2026/)
+- [How to source obsolete automation components safely (and avoid counterfeits)](https://gpenergia.com.pl/blog/obsolete-automation-components-sourcing/)

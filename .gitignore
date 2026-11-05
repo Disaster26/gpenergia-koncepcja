@@ -1,0 +1,11 @@
+_dist/
+__pycache__/
+# source photos (Adobe Stock licence - not for public repo) and raw logos
+_src/*.jpg
+_src/*.jpeg
+_src/*.webp
+_src/*.svg
+_src/*.png
+_src/logos/
+_src/seo_0511/
+_src/logo_final/
