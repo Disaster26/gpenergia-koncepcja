@@ -1133,10 +1133,14 @@ def main():
         shutil.copy(ROOT / "site.webmanifest", OUT / "site.webmanifest")
     articles = BLOGMOD.load()
     for L in ("en", "pl"):
-        page_home(L); page_services(L); page_products(L); page_references(L); page_about(L); page_brands(L)
+        # 05.11: kontekst strony (jezyk + sciezka) ustawiany PRZED skladaniem tresci - inaczej obrazy dostaja sciezki poprzedniej strony
+        def _c(pid):
+            C.lang = L; C.pid = pid; C.path = P(pid, L); C.alt = PATHS[pid]
+        _c("home"); page_home(L); _c("services"); page_services(L); _c("products"); page_products(L)
+        _c("references"); page_references(L); _c("about"); page_about(L); _c("brands"); page_brands(L)
         for k in SVC_ORDER:
             page_service_sub(k, L)
-        page_contact(L); page_privacy(L); page_blog_index(L)
+        _c("contact"); page_contact(L); _c("privacy"); page_privacy(L); _c("blog"); page_blog_index(L)
         for a in articles:
             page_article(a[L], L)
     page_404()
