@@ -166,6 +166,18 @@ def faq_ld(faq):
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub("<[^>]+>", "", a)}} for q, a in faq]}
 
 # ---------------------------------------------------------------- layout
+_CSS = None
+def inline_css():
+    """whole stylesheet inlined (no render-blocking request); font urls rewritten per page depth"""
+    global _CSS
+    if _CSS is None:
+        css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
+        css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+        css = re.sub(r"\s*\n\s*", "", css)
+        css = re.sub(r"\s*([{};>])\s*", r"\1", css).replace(";}", "}")
+        _CSS = css
+    return _CSS.replace("url(fonts/", "url(" + asset("assets/fonts/"))
+
 def head(title, desc, alt_paths, extra_ld, ogimg="cabinet"):
     t = tr()
     en_p, pl_p = alt_paths
@@ -204,11 +216,12 @@ def head(title, desc, alt_paths, extra_ld, ogimg="cabinet"):
 <meta property="og:url" content="{canon}">
 {('<meta property="og:image" content="' + CANON + '/img/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">') if (ROOT / "img/og-image.png").exists() else ('<meta property="og:image" content="' + CANON + '/img/p/' + ogimg + '-' + str(ogw) + '.webp">')}
 <meta property="og:locale" content="{'en_GB' if C.lang == 'en' else 'pl_PL'}">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#232826">
+<script>document.documentElement.classList.add('js')</script>
 {chr(10).join(fav)}
 <link rel="preload" href="{asset('assets/fonts/plex-latin.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{asset('assets/fonts/archivo-latin.woff2')}" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{asset('assets/site.css')}?v={VER}">
+<style>{inline_css()}</style>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False, separators=(",", ":"))}</script>
 </head>
 '''
@@ -221,7 +234,7 @@ def header():
     en_p, pl_p = C.alt
     lang = (f'<a href="{rel(en_p)}" hreflang="en" lang="en"{" aria-current=" + chr(34) + "true" + chr(34) if L == "en" else ""}>EN</a>'
             f'<a href="{rel(pl_p)}" hreflang="pl" lang="pl"{" aria-current=" + chr(34) + "true" + chr(34) if L == "pl" else ""}>PL</a>')
-    lw, lh = svg_size(logo_file())
+    lw, lh = svg_size(logo_file(True))
     return f'''<body class="p-{C.pid}">
 <a class="skip" href="#main">{t["skip"]}</a>
 <div class="util">
@@ -232,7 +245,7 @@ def header():
 </div>
 <header class="top" id="top">
   <div class="wrap top-in">
-    <a class="logo" href="{rel(P("home"))}" aria-label="GP ENERGIA - {esc(t["home"])}"><img src="{asset(logo_file())}" width="{round(lw)}" height="{round(lh)}" alt="GP ENERGIA"></a>
+    <a class="logo" href="{rel(P("home"))}" aria-label="GP ENERGIA - {esc(t["home"])}"><img src="{asset(logo_file(True))}" width="{round(lw)}" height="{round(lh)}" alt="GP ENERGIA"></a>
     <nav class="menu" id="menu" aria-label="{"Main" if L == "en" else "Menu główne"}">
       {nav}
       <div class="menu-extra">
@@ -527,7 +540,7 @@ def page_home(L):
               ("project", "Dostawy projektowe", "Dla prefabrykatorów, integratorów, OEM i generalnych wykonawców: listy na 50-300 pozycji w jednej dostawie."),
               ("export", "Logistyka i eksport", "EXW, FCA albo DAP. Kurier lub spedycja paletowa do Europy, USA, Azji, na Bliski Wschód i do Afryki.")]
     svc = "".join(f'<li><h3><a href="{rel(P("services"))}#{a}">{esc(t)}</a></h3><p>{esc(d)}</p></li>' for a, t, d in sv)
-    services = f'''<section class="sec" aria-labelledby="h-sv">
+    services = f'''<section class="sec sec-dark" aria-labelledby="h-sv">
   <div class="wrap">
     <div class="sec-head"><h2 id="h-sv">{sv_h}</h2></div>
     <ul class="svc">{svc}</ul>
@@ -737,7 +750,7 @@ def page_services(L):
   <span class="svc-row-more">{more}{I_ARROW}</span></a></li>''' for k in SVC_ORDER)
     faq = SEO_FAQ.get(("services", L)) or FAQ[L]
     body = ph + f'''<section class="sec"><div class="wrap"><ul class="svc-rows">{rows}</ul></div></section>
-<section class="sec sec-panel" aria-labelledby="h-how"><div class="wrap split">
+<section class="sec sec-dark" aria-labelledby="h-how"><div class="wrap split">
   <div class="split-txt"><h2 id="h-how">{how_h}</h2><ol class="steps">{"".join(f"<li>{x}</li>" for x in how)}</ol></div>
   {bom_table()}
 </div></section>

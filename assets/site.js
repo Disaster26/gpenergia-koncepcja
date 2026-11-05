@@ -41,6 +41,23 @@
     hideOver.forEach(function (el) { io.observe(el); });
   }
 
+  // scroll reveal: only elements starting below the fold, transform/opacity only
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce && 'IntersectionObserver' in window) {
+    var sel = '.sec-head, .sec-dark h2, .export-txt, .cat, .svc li, .case-row, .post, .split-txt > h2, .facts, .timeline li, .pgroup, .case, .svc-row, .bomsheet, .logowall, .bgroup, .faq, .ctaband-in, .subsec';
+    var vh = window.innerHeight;
+    var rio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    d.querySelectorAll(sel).forEach(function (el) {
+      if (el.getBoundingClientRect().top > vh * 0.92) { el.classList.add('rv'); rio.observe(el); }
+    });
+    // stagger siblings in grids
+    d.querySelectorAll('.cats, .svc, .posts, .cases').forEach(function (g) {
+      Array.prototype.forEach.call(g.children, function (c, i) { c.style.transitionDelay = (i % 3) * 80 + 'ms'; });
+    });
+  }
+
   // RFQ form
   var form = d.getElementById('rfqForm');
   if (!form) return;

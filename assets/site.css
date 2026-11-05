@@ -509,3 +509,152 @@ svg{fill:currentColor}
 .strip-logos img.sq{max-height:32px}
 .narrow h2{margin-bottom:16px}
 @media (min-width:860px){.hero-spec{max-width:72ch}.strip p{max-width:30ch}}
+
+/* =====================================================================
+   BRAND LAYER - graphite + GP green, logo streak motif (17deg), technical texture
+   ===================================================================== */
+:root{
+  --g-on-dark:#3fb54a;--g-on-dark-h:#5cc865;--txt-dark:#c3cbc6;--txt-dark2:#9fa9a4;--line-dark:rgba(255,255,255,.13);
+  --streak-dark:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12'%3E%3Cpath fill='%23232826' d='M0 9.6 81 4h8.4l-2.4 8H0z'/%3E%3Cpath fill='%23178c3a' d='M93.4 4h6.6L97.6 12H91zM104.4 4h6.6L108.6 12H102zM115.4 4h4.6L117.6 12H113z'/%3E%3C/svg%3E");
+  --streak-light:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12'%3E%3Cpath fill='%23ffffff' d='M0 9.6 81 4h8.4l-2.4 8H0z'/%3E%3Cpath fill='%233fb54a' d='M93.4 4h6.6L97.6 12H91zM104.4 4h6.6L108.6 12H102zM115.4 4h4.6L117.6 12H113z'/%3E%3C/svg%3E");
+  --streak-white:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12'%3E%3Cpath fill='%23ffffff' d='M0 9.6 81 4h8.4l-2.4 8H0z'/%3E%3Cpath fill='%23ffffff' fill-opacity='.65' d='M93.4 4h6.6L97.6 12H91zM104.4 4h6.6L108.6 12H102zM115.4 4h4.6L117.6 12H113z'/%3E%3C/svg%3E");
+  --tex:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cpath d='M0 .5H96M.5 0V96' stroke='%23ffffff' stroke-opacity='.05'/%3E%3Cpath d='M0 24.5H96M0 48.5H96M0 72.5H96M24.5 0V96M48.5 0V96M72.5 0V96' stroke='%23ffffff' stroke-opacity='.022'/%3E%3C/svg%3E");
+  --rail:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='192'%3E%3Crect y='150' width='48' height='14' fill='%23ffffff' fill-opacity='.016'/%3E%3Crect x='14' y='154' width='20' height='6' rx='3' fill='%23000000' fill-opacity='.1'/%3E%3C/svg%3E");
+}
+.util{background:#1a1f1d;border-bottom-color:#1a1f1d;color:var(--txt-dark)}
+.util svg{color:var(--g-on-dark)}
+.util-r>a{color:#fff}
+.lang a{color:var(--txt-dark2)}
+.lang a[aria-current]{background:#fff;color:var(--graphite)}
+.lang a:not([aria-current]):hover{color:#fff}
+.top{background:var(--graphite);border-bottom-color:var(--line-dark)}
+.burger{color:#fff}
+.btn-top,.sec-dark .btn,.hero .btn,.phead .btn,.export .btn{background:var(--g-on-dark);color:#14201a}
+.btn-top:hover,.sec-dark .btn:hover,.hero .btn:hover,.phead .btn:hover,.export .btn:hover{background:var(--g-on-dark-h)}
+.hero :focus-visible,.top :focus-visible,.phead :focus-visible,.sec-dark :focus-visible,.export :focus-visible,.foot :focus-visible,.util :focus-visible{outline-color:var(--g-on-dark)}
+@media (min-width:1100px){
+  .menu>a{color:var(--txt-dark)}
+  .menu>a:hover{color:#fff}
+  .menu>a[aria-current]{color:#fff;border-bottom-color:var(--g-on-dark)}
+}
+@media (max-width:1099px){
+  .menu.open{background-color:var(--graphite);background-image:var(--tex);border-top-color:var(--line-dark)}
+  .menu.open>a{color:#fff;border-bottom-color:var(--line-dark)}
+  .menu.open>a[aria-current]{color:var(--g-on-dark)}
+  .menu-mail{color:#fff}.menu-mail svg{color:var(--g-on-dark)}
+  .menu-extra .lang a{border-color:var(--line-dark);color:var(--txt-dark)}
+  .menu-extra .lang a[aria-current]{border-color:#fff;color:var(--graphite)}
+}
+
+/* streak motif on headings */
+.sec-head h2::before,.sec-dark h2::before,.export h2::before,.ctaband h2::before{content:"";display:block;width:84px;height:9px;margin-bottom:18px;background:var(--streak-dark) no-repeat left center/contain}
+.sec-dark h2::before,.export h2::before{background-image:var(--streak-light)}
+.ctaband h2::before{background-image:var(--streak-white)}
+.hero h1::after,.phead h1::after,.art-head h1::after{content:"";display:block;width:110px;height:11px;margin-top:20px;background:var(--streak-light) no-repeat left center/contain}
+.ticks li::before{width:10px;height:5px;top:.55em;transform:skewX(-17deg);background:var(--green)}
+
+/* dark surfaces share the technical texture */
+.hero,.phead,.art-head,.sec-dark,.export,.ctaband{background-color:var(--graphite);background-image:var(--tex),var(--rail);color:var(--txt-dark)}
+.hero h1,.phead h1,.art-head h1,.sec-dark h2,.sec-dark h3,.export h2,.ctaband h2{color:#fff}
+.hero .lead,.phead .lead,.art-head .lead{color:var(--txt-dark)}
+
+/* hero */
+.hero{border-bottom:0}
+.hero-loc,.hero-spec{color:var(--txt-dark2)}
+.hero-spec{border-top-color:var(--line-dark)}
+.hero .mail-link{color:#fff;border-color:rgba(255,255,255,.3)}
+.hero .mail-link svg{color:var(--g-on-dark)}
+.hero .mail-link:hover{border-color:#fff}
+.hero-img{background:#f3f4f2;clip-path:polygon(0 0,100% 0,100% calc(100% - 22px),0 100%)}
+@media (min-width:860px){
+  .hero-img{clip-path:polygon(clamp(80px,9vw,180px) 0,100% 0,100% 100%,0 100%)}
+  .hero-img img{padding:6% 7% 4% 18%}
+}
+.strip{background:transparent;border-top:1px solid var(--line-dark)}
+.strip p{color:var(--txt-dark2)}
+.strip-logos img{filter:brightness(0) invert(1);opacity:.72}
+.strip .more{color:var(--g-on-dark)}
+
+/* category tiles: lift + green bar */
+.cat a{position:relative;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.cat a::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
+.cat a:hover{transform:translateY(-3px);box-shadow:0 14px 28px -18px rgba(22,27,25,.35)}
+.cat a:hover::after{transform:scaleX(1)}
+.cat a:hover .cat-t{text-decoration:none;color:var(--green-ui)}
+.logowall li{transition:background-color .2s ease}
+.logowall li:hover{background:var(--panel)}
+.logowall li:hover img{opacity:1}
+.post a:hover .post-t{text-decoration:none;color:var(--green-ui)}
+
+/* dark band sections */
+.sec-dark{padding:var(--sec) 0}
+.sec+.sec-dark,.sec-dark+.sec{padding-top:var(--sec)!important}
+.sec-dark p,.sec-dark li{color:var(--txt-dark)}
+.sec-dark a{color:#fff}
+.sec-dark .svc,.sec-dark .svc li{border-color:var(--line-dark)}
+.sec-dark .svc h3 a:hover{color:var(--g-on-dark)}
+@media (min-width:1100px){.sec-dark .svc li{border-top:2px solid var(--g-on-dark)}}
+.sec-dark .steps li::marker{color:var(--g-on-dark)}
+.sec-dark .steps b{color:#fff}
+.sec-dark .bomsheet{box-shadow:0 24px 48px -24px rgba(0,0,0,.6)}
+.sec-dark .bomsheet td,.sec-dark .bomsheet th,.sec-dark .bomsheet caption b{color:var(--ink)}
+.sec-dark .bomsheet td span,.sec-dark .bomsheet caption span{color:var(--ink3)}
+
+/* export band dark */
+.export .facts,.export .facts>div{border-color:var(--line-dark)}
+.export .facts dt,.export .small{color:var(--txt-dark2)}
+.export .facts dd{color:#fff}
+.export p{color:var(--txt-dark)}
+@media (min-width:960px){.export-img{clip-path:polygon(0 0,100% 0,calc(100% - clamp(60px,7vw,140px)) 100%,0 100%)}}
+
+/* CTA band in deep brand green */
+.ctaband{background-color:#126b2d;border-top:0;color:#e3efe5}
+.ctaband p{color:#dcebdf}
+.ctaband .btn{background:#fff;color:var(--graphite)}
+.ctaband .btn:hover{background:#e6efe8}
+.ctaband .mail-link{color:#fff;border-color:rgba(255,255,255,.4)}
+.ctaband .mail-link svg{color:#fff}
+.ctaband :focus-visible{outline-color:#fff}
+
+/* inner page heads + article head dark */
+.phead,.art-head{border-bottom:0}
+.crumbs ol{color:var(--txt-dark2)}
+.crumbs a{color:var(--txt-dark)}
+.crumbs li[aria-current]{color:var(--txt-dark2)}
+.crumbs li:not(:last-child)::after{color:rgba(255,255,255,.3)}
+.phead .lead a{color:var(--g-on-dark)}
+.art-meta{color:var(--txt-dark2)}
+@media (min-width:1000px){.phead-toc{border-left-color:var(--line-dark)}.phead-toc a{color:var(--txt-dark)}.phead-toc a:hover{color:var(--g-on-dark)}}
+.phead-404 .txt-link{color:var(--g-on-dark)}
+.foot{border-top:3px solid var(--green)}
+
+/* BOM sheet being quoted: rows arrive, each gets a green dash */
+.bomsheet td.q{position:relative;padding-right:26px}
+.bomsheet td.q::after{content:"";position:absolute;right:9px;top:16px;width:9px;height:5px;background:var(--green);transform:skewX(-17deg)}
+.js .bomsheet.rv tbody tr{opacity:0;transform:translateX(-10px)}
+.js .bomsheet.rv td.q::after{transform:skewX(-17deg) scaleX(0)}
+.js .bomsheet.rv.in tbody tr{opacity:1;transform:none;transition:opacity .4s ease,transform .4s ease}
+.js .bomsheet.rv.in td.q::after{transform:skewX(-17deg) scaleX(1);transition:transform .3s ease}
+.js .bomsheet.rv.in tbody tr:nth-child(2){transition-delay:.12s}.js .bomsheet.rv.in tbody tr:nth-child(3){transition-delay:.24s}
+.js .bomsheet.rv.in tbody tr:nth-child(4){transition-delay:.36s}.js .bomsheet.rv.in tbody tr:nth-child(5){transition-delay:.48s}
+.js .bomsheet.rv.in tbody tr:nth-child(6){transition-delay:.6s}
+.js .bomsheet.rv.in tbody tr:nth-child(1) td.q::after{transition-delay:.5s}.js .bomsheet.rv.in tbody tr:nth-child(2) td.q::after{transition-delay:.7s}
+.js .bomsheet.rv.in tbody tr:nth-child(3) td.q::after{transition-delay:.9s}.js .bomsheet.rv.in tbody tr:nth-child(4) td.q::after{transition-delay:1.1s}
+.js .bomsheet.rv.in tbody tr:nth-child(5) td.q::after{transition-delay:1.3s}.js .bomsheet.rv.in tbody tr:nth-child(6) td.q::after{transition-delay:1.5s}
+
+/* scroll reveal (JS adds .rv only to elements below the fold) */
+.js .rv:not(.bomsheet){opacity:0;transform:translateY(18px)}
+.js .rv.in:not(.bomsheet){opacity:1;transform:none;transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
+.js .rv h2::before{transform:scaleX(0);transform-origin:left center}
+.js .rv.in h2::before{transform:scaleX(1);transition:transform .6s cubic-bezier(.2,.7,.2,1) .15s}
+@media (prefers-reduced-motion:reduce){.js .rv,.js .rv tbody tr{opacity:1!important;transform:none!important}.js .bomsheet.rv td.q::after{transform:skewX(-17deg)!important}.js .rv h2::before{transform:none!important}}
+/* brand round 2 */
+.ctaband{background-image:var(--tex)}
+.sec > .wrap > .split-txt > h2::before,.sec > .wrap.narrow > h2::before{content:"";display:block;width:84px;height:9px;margin-bottom:18px;background:var(--streak-dark) no-repeat left center/contain}
+.sec-dark > .wrap > .split-txt > h2::before{background-image:var(--streak-light)}
+.phead,.art-head{position:relative;overflow:hidden}
+.phead > .wrap,.art-head > .wrap{position:relative;z-index:1}
+@media (min-width:900px){
+  .phead::before,.art-head::before{content:"";position:absolute;right:-60px;top:22%;width:min(46vw,680px);height:68px;background:var(--streak-light) no-repeat right center/contain;opacity:.06;pointer-events:none}
+  .phead-in.has-aside ~ *{position:relative}
+}
