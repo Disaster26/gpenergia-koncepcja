@@ -86,6 +86,15 @@
     });
   }
 
+  // swipe rows: mouse drag in addition to touch scrolling
+  d.querySelectorAll('.posts:not(.posts-index)').forEach(function (row) {
+    var down = false, x0 = 0, s0 = 0, moved = false;
+    row.addEventListener('mousedown', function (e) { if (row.scrollWidth <= row.clientWidth) return; down = true; moved = false; x0 = e.pageX; s0 = row.scrollLeft; row.classList.add('drag'); e.preventDefault(); });
+    window.addEventListener('mousemove', function (e) { if (!down) return; var dx = e.pageX - x0; if (Math.abs(dx) > 4) moved = true; row.scrollLeft = s0 - dx; });
+    window.addEventListener('mouseup', function () { if (!down) return; down = false; row.classList.remove('drag'); });
+    row.addEventListener('click', function (e) { if (moved) { e.preventDefault(); moved = false; } }, true);
+  });
+
   // RFQ form
   var form = d.getElementById('rfqForm');
   if (!form) return;

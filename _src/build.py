@@ -11,9 +11,12 @@ from content import *  # noqa
 import blog as BLOGMOD
 
 PROD = "--prod" in sys.argv
+WP = "--wp" in sys.argv                     # export for the WordPress theme (GPENERGIA_wdrozenie)
+WP_OUT = Path(sys.argv[sys.argv.index("--wp") + 1]) if WP else None
+WP_PAGES, WP_POSTS = [], []
 CANON = "https://gpenergia.com.pl"          # the ONE canonical origin
 PREVIEW_BASE = "/gpenergia-koncepcja/"      # absolute base only used by 404.html on GitHub Pages
-FORM_ENDPOINT = ""                          # empty = preview mock; set to WP endpoint on launch
+FORM_ENDPOINT = "{{FORM}}" if "--wp" in sys.argv else ""   # preview: mock; WordPress: admin-post endpoint
 ROOT = Path(__file__).resolve().parents[1]
 OUT = (ROOT / "_dist") if PROD else ROOT
 SRC = ROOT / "_src"
@@ -80,6 +83,8 @@ C = Ctx()
 
 def rel(to):
     """relative link from current page dir to site path `to` ('' = root)."""
+    if WP:
+        return to if to.startswith("{{") else "/" + to
     depth = C.path.count("/")
     pre = "../" * depth
     return (pre + to) or "./"
@@ -88,7 +93,7 @@ def P(pid, lang=None):
     lang = lang or C.lang
     return PATHS[pid][0 if lang == "en" else 1]
 
-def asset(p): return rel(p)
+def asset(p): return ("{{T}}/" + p) if WP else rel(p)
 
 def tr(): return T[C.lang]
 
@@ -231,7 +236,7 @@ def head(title, desc, alt_paths, extra_ld, ogimg="cabinet"):
 def header():
     t = tr(); L = C.lang
     nav = "".join(
-        f'<a href="{rel(P(pid))}"{" aria-current=" + chr(34) + "page" + chr(34) if (C.pid == pid or (pid == "blog" and C.pid == "article")) else ""}>{esc(lbl)}</a>'
+        f'<a href="{rel(P(pid))}"{" aria-current=" + chr(34) + "page" + chr(34) if (C.pid == pid or (pid == "blog" and C.pid == "article") or (pid == "services" and C.pid.startswith("service_")) or (pid == "products" and C.pid == "brands")) else ""}>{esc(lbl)}</a>'
         for pid, lbl in t["nav"])
     en_p, pl_p = C.alt
     lang = (f'<a href="{rel(en_p)}" hreflang="en" lang="en"{" aria-current=" + chr(34) + "true" + chr(34) if L == "en" else ""}>EN</a>'
@@ -371,6 +376,11 @@ def render(pid, lang, body, extra_ld=None, path=None, alt=None, title=None, desc
     C.path = path if path is not None else P(pid, lang)
     m = META.get(pid, {}).get(lang, {})
     title = title or m["title"]; desc = desc or m["desc"]
+    if WP:
+        body = body.replace("—", "-").replace("–", "-")
+        WP_PAGES.append({"pid": pid, "lang": lang, "path": C.path, "title": title, "desc": desc,
+                         "h1": m.get("h1", title), "body": body, "ld": extra_ld or [], "alt": list(C.alt)})
+        return
     out = head(title, desc, C.alt, extra_ld or [], ogimg) + header() + '<main id="main">\n' + body + '\n</main>\n' + footer()
     out = out.replace("—", "-").replace("–", "-")
     write(C.path, out)
@@ -646,7 +656,7 @@ def page_home(L):
     blog_html = ""
     if posts:
         h_b = "Guides for buyers and engineers" if L == "en" else "Poradniki dla zaopatrzenia i inżynierów"
-        items = "".join(post_card(p) for p in posts)
+        items = '[gpe_posts n="3"]' if WP else "".join(post_card(p) for p in posts)
         blog_html = f'''<section class="sec sec-line" aria-labelledby="h-bl">
   <div class="wrap">
     <div class="sec-head sec-head-row"><h2 id="h-bl">{h_b}</h2><a class="txt-link" href="{rel(P("blog"))}">{"All articles" if L == "en" else "Wszystkie artykuły"}{I_ARROW}</a></div>
@@ -931,7 +941,7 @@ def page_contact(L):
                  file_btn="Choose file", file_none="No file selected",
                  consent=f'I agree to {COMPANY["legal"]} processing my data to answer this enquiry, as described in the <a href="{rel(P("privacy"))}">privacy policy</a>.',
                  req="required", send="Send enquiry", hp="Leave this field empty",
-                 ok_h="Thank you, your enquiry is ready", ok_p="Preview version: the form is not connected yet. On the live site it is sent straight to info@gpenergia.com.pl. Until then please e-mail your list to",
+                 ok_h=("Thank you, your enquiry has been sent" if WP else "Thank you, your enquiry is ready"), ok_p=("We will reply to the e-mail address you gave, usually within 1-6 hours. If anything is urgent, write to" if WP else "Preview version: the form is not connected yet. On the live site it is sent straight to info@gpenergia.com.pl. Until then please e-mail your list to"),
                  side_h="Contact details", addr_h="Warehouse and dispatch", map_t="Map: ul. Polna 29, Długołęka", map_l="Open in Google Maps", reg_h="Company")
     else:
         lead = f'Wpisz kody produktów albo dołącz plik BOM lub napisz na <a href="mailto:{EMAIL}">{EMAIL}</a>. Odpowiemy z cenami, terminami dostaw i ewentualnymi zamiennikami.'
@@ -941,7 +951,7 @@ def page_contact(L):
                  file_btn="Wybierz plik", file_none="Nie wybrano pliku",
                  consent=f'Zgadzam się na przetwarzanie moich danych przez {COMPANY["legal"]} w celu odpowiedzi na zapytanie, zgodnie z <a href="{rel(P("privacy"))}">polityką prywatności</a>.',
                  req="wymagane", send="Wyślij zapytanie", hp="Zostaw to pole puste",
-                 ok_h="Dziękujemy, zapytanie jest gotowe", ok_p="Wersja podglądowa: formularz nie jest jeszcze podłączony. Na docelowej stronie trafi prosto na info@gpenergia.com.pl. Do tego czasu prosimy o wysłanie listy na adres",
+                 ok_h=("Dziękujemy, zapytanie zostało wysłane" if WP else "Dziękujemy, zapytanie jest gotowe"), ok_p=("Odpowiemy na podany adres e-mail, zwykle w ciągu 1-6 godzin. W pilnej sprawie napisz na" if WP else "Wersja podglądowa: formularz nie jest jeszcze podłączony. Na docelowej stronie trafi prosto na info@gpenergia.com.pl. Do tego czasu prosimy o wysłanie listy na adres"),
                  side_h="Dane kontaktowe", addr_h="Magazyn i wysyłka", map_t="Mapa: ul. Polna 29, Długołęka", map_l="Otwórz w Mapach Google", reg_h="Firma")
     ph = page_head(m["h1"], lead, [(t["home"], P("home")), (t["nav"][5][1], P("contact"))])
     star = f'<span class="req" aria-hidden="true">*</span>'
@@ -961,7 +971,7 @@ def page_contact(L):
     <p class="hint" id="f-file-h">{F["file_hint"]}</p>
   </div>
   <div class="hp" aria-hidden="true"><label for="f-web">{F["hp"]}</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
-  <input type="hidden" name="t" id="f-t" value="">
+  <input type="hidden" name="t" id="f-t" value=""><input type="hidden" name="lang" value="{L}">
   <div class="f f-full f-check"><input id="f-consent" name="consent" type="checkbox" required aria-required="true"><label for="f-consent">{F["consent"]} {star}</label></div>
   <div class="f f-full f-submit"><button class="btn btn-lg" type="submit">{F["send"]}</button><p class="f-err" id="f-err" role="alert" aria-live="assertive"></p></div>
 </form>
@@ -1051,7 +1061,7 @@ def page_blog_index(L):
             "Praktyczne poradniki o wycenie list BOM, wycofanych komponentach automatyki i wysyłce części za granicę, pisane na podstawie codziennej pracy z zaopatrzeniem i inżynierami.")
     ph = page_head(m["h1"], esc(lead), [(t["home"], P("home")), ("Blog", P("blog"))])
     posts = BLOGMOD.posts(L)
-    items = "".join(post_card(p) for p in posts)
+    items = '[gpe_posts]' if WP else "".join(post_card(p) for p in posts)
     body = ph + f'<section class="sec"><div class="wrap"><ul class="posts posts-index">{items}</ul></div></section>' + cta_band()
     bl = {"@type": "Blog", "name": "GP ENERGIA Blog", "url": CANON + "/" + P("blog"), "inLanguage": L, "publisher": {"@id": CANON + "/#org"},
           "blogPost": [{"@type": "BlogPosting", "headline": p["title_h"], "url": CANON + "/" + p["path"], "datePublished": p["date"]} for p in posts]}
@@ -1063,6 +1073,15 @@ def page_article(p, L):
     alt = (p["path"], other) if L == "en" else (other, p["path"])
     C.lang = L; C.pid = "article"; C.alt = alt; C.path = p["path"]
     p["html"], p["toc"] = BLOGMOD.render_html(p, rel)
+    if WP:
+        body_html, _ = BLOGMOD._to_html(p["md"], rel)
+        WP_POSTS.append({"lang": L, "slug": p["slug"], "path": p["path"], "alt_path": other, "h1": p["h1"], "title": p["title"],
+                         "desc": p["desc"], "excerpt": p["lead"] or p["excerpt"], "date": p["date"], "category": p["category"],
+                         "img": p["img"], "html": body_html.replace("—", "-").replace("–", "-"), "faq": p.get("faq") or [],
+                         "sources": [str(x) for x in p.get("sources") or []],
+                         "box": (["Have a BOM to quote?", "Send the list as it is. We reply with prices, lead times and alternatives, often within 1-6 hours.", "Send your BOM"] if L == "en" else
+                                 ["Masz listę BOM do wyceny?", "Wyślij ją w takiej postaci, w jakiej jest. Odpowiemy z cenami, terminami i zamiennikami, często w ciągu 1-6 godzin.", "Wyślij listę BOM"])})
+        return
     toc = "".join(f'<li><a href="#{a}">{esc(b)}</a></li>' for a, b in p["toc"])
     faq = p.get("faq") or []
     faq_html = f'<section class="art-faq" aria-labelledby="h-afaq"><h2 id="h-afaq">{t["faq"]}</h2>{faq_block(faq)}</section>' if faq else ""
@@ -1167,7 +1186,70 @@ def sitemap(articles):
     (OUT / "robots.txt").write_text(prod_robots if PROD else "# preview - do not index\nUser-agent: *\nDisallow: /\n", encoding="utf-8")
 
 # ---------------------------------------------------------------- main
+def wp_export(articles):
+    """header/footer partials per language + pages/posts JSON for the WordPress theme"""
+    import os
+    out = WP_OUT
+    (out / "parts").mkdir(parents=True, exist_ok=True)
+    for L in ("en", "pl"):
+        C.lang = L; C.pid = "__"; C.path = ""; C.alt = ("{{ALT_EN}}", "{{ALT_PL}}")
+        h = header()
+        h = re.sub(r'^<body[^>]*>\n', '', h)
+        f = footer()
+        f = re.sub(r'\n<script src=.*?</script>\n</body>\n</html>\n?$', '\n', f, flags=re.S)
+        (out / "parts" / f"header-{L}.html").write_text(h.replace("—", "-").replace("–", "-"), encoding="utf-8")
+        (out / "parts" / f"footer-{L}.html").write_text(f.replace("—", "-").replace("–", "-"), encoding="utf-8")
+    # 404 body (EN + PL line), absolute links
+    C.lang = "en"; C.pid = "404"; C.path = ""
+    b404 = f'''<section class="phead phead-404"><div class="wrap">
+<h1>Page not found</h1>
+<p class="lead">The page you are looking for does not exist or has moved. <span lang="pl">Nie znaleziono strony - mogła zostać przeniesiona.</span></p>
+<p class="actions"><a class="btn" href="/">Go to the home page</a><a class="txt-link" href="/pl/" lang="pl">Strona główna po polsku{I_ARROW}</a><a class="txt-link" href="/contact/#rfq">Request a quote{I_ARROW}</a></p>
+</div></section>'''
+    (out / "parts" / "404.html").write_text(b404, encoding="utf-8")
+    import wpblocks
+    for q in WP_POSTS:
+        fq = "Frequently asked questions" if q["lang"] == "en" else "Najczęstsze pytania"
+        sr = "Sources" if q["lang"] == "en" else "Źródła"
+        q["blocks"] = (chr(10) * 2).join(x for x in (wpblocks.convert(q["html"]), wpblocks.faq(q["faq"], fq), wpblocks.sources(q["sources"], sr)) if x)
+    data = {"canon": CANON, "email": EMAIL, "company": COMPANY, "slogan": SLOGAN, "pages": WP_PAGES, "posts": WP_POSTS,
+            "paths": PATHS, "llms": (OUT / "llms.txt").read_text(encoding="utf-8") if (OUT / "llms.txt").exists() else ""}
+    (out / "starter").mkdir(exist_ok=True)
+    (out / "starter" / "content.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    # CSS (base + brand) and JS for the theme
+    (out / "assets").mkdir(exist_ok=True)
+    css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8") + "\n" + (SRC / "brand.css").read_text(encoding="utf-8") + "\n" + (SRC / "wp.css").read_text(encoding="utf-8")
+    (out / "assets" / "site.css").write_text(css, encoding="utf-8")
+    shutil.copy(ROOT / "assets" / "site.js", out / "assets" / "site.js")
+    for d in ("assets/fonts", "img"):
+        if (out / d).exists():
+            shutil.rmtree(out / d)
+        shutil.copytree(ROOT / d, out / d)
+    for pth in (out / "img" / "brands").glob("*.png"):
+        pth.unlink()
+    for junk in ("img/marki", "img/logo/wzor-klienta.png"):
+        q = out / junk
+        if q.is_dir():
+            shutil.rmtree(q)
+        elif q.exists():
+            q.unlink()
+    print("WP export:", len(WP_PAGES), "pages,", len(WP_POSTS), "posts ->", out)
+
 def main():
+    if WP:
+        articles = BLOGMOD.load()
+        for L in ("en", "pl"):
+            def _c(pid):
+                C.lang = L; C.pid = pid; C.path = P(pid, L); C.alt = PATHS[pid]
+            _c("home"); page_home(L); _c("services"); page_services(L); _c("products"); page_products(L)
+            _c("references"); page_references(L); _c("about"); page_about(L); _c("brands"); page_brands(L)
+            for k in SVC_ORDER:
+                page_service_sub(k, L)
+            _c("contact"); page_contact(L); _c("privacy"); page_privacy(L); _c("blog"); page_blog_index(L)
+            for a in articles:
+                page_article(a[L], L)
+        wp_export(articles)
+        return
     if PROD:
         if OUT.exists():
             shutil.rmtree(OUT)
