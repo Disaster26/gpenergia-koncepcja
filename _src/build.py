@@ -137,6 +137,8 @@ WYLINKA = ('<a class="wylinka-badge" href="https://wylinka.pl/?utm_source=gpener
            '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false" fill="currentColor"><path d="M9.8 22.8l-1.2-7.9 2.2-3.7 15.5 4.6-.5 1.5-7.2 5.5 4.7 15.6 5-15.6 7 0 4.1 12.7-4.2-.9-2.6 1.8-.8-2.2-5.3 15.6-4.3 0 .4 .2-2.1 2.8-1.3-1.1 1.1-1.4-3.1 .2-.1-1.7 2.2-.1-5.7-16.5-4.8 .6-.8 3.1 0 .5-.3 .5 .8 2.2-1.6 .5-.4-1.3-.8 1.6-1.5-.8 .8-1.6-1.4 .6-.6-1.6 2.3-.8 .2-.4 1.3-4.8 5.9-.8-2.4-6.9zM15.2 13.7l-.1-.4-.4 .8-.1 .8 .1 1 .1 .4 .3 .7 .3-.9 .1-.7 0-.8z"/><path class="wy-pod" d="M37.1 49.8l-4.5-13.3 2.6-1.8 4.2 .9 .9 2.8 3-9.7 0-.5 .1-.8 3.2-8.4 .5-1 .6-1 .9-1.1 1.3-1 1.1-.7 1.4-.5 1.4-.3 .7 0 .9 0 1.2 .3 1.4 .6 .8 .5 .7 .7 .6 .7 .5 .9 .3 .9 .1 .9 0 .8-.2 .9-.5 .9-.5 .6-.7 .5-.7 .3-.1-.1 0-.1 .5-.5 .3-.7 .2-.5 0-.6-.1-.6-.3-.7-.4-.5-.4-.4-.5-.3-.6-.3-.7 0-.7 .1-.6 .1-.5 .4-.5 .5-.3 .5-.2 .7-.1 1.5-1.4 5.1-.8 3.3-.3 .7-.5 .7-6 17.5 1.9 .1-.1 1.7-3.1-.2 1.1 1.4-1.3 1.1-2.1-2.8 .4-.2z"/><path class="wy-old" d="M40.8 50l.4-.2-4.1 0-4.2-12.5 2.5-1.7 4.3 .9 .6 1.9 .6-1.6 0-.3 2.4-7.8 0-.5 .1-.8 3.2-8.4 .4-.8 .6-.9 .9-1.2 .9-.9 1.3-.8 1.4-.6 1.2-.3 1.4-.1 1.3 .1 .6 .2 .8 .3 1.1 .6 .9 .7 .7 .9 .5 .9 .3 .9 .1 1.1-.1 .9-.3 .9-.4 .7-.6 .7-.6 .4-.6 .2-.1-.1 0-.1 .5-.5 .3-.7 .2-.5 0-.5-.1-.6-.2-.6-.3-.5-.4-.5-.5-.3-.6-.3-.7-.1-.6 0-.6 .1-.6 .3-.6 .5-.3 .4-.2 .5-.1 .5-.1 1.5-1.4 5.1-.8 3.3-.3 .7-.5 .7-6 17.5 1.9 .1-.1 1.7-3.1-.2 1.1 1.4-1.3 1.1zM49.6 17.1l.6 1.7-1.5 1.9 .4 .4 1.8-2.1-.7-2.1zM48.1 28.3l.5 1.8-1.7 1.8 .4 .4 1.9-2-.6-2.2zM37.9 41.7l1.7-1.5-.4-.4-1.7 1.4zM42.6 38.7l-1.5 2.8 1.1 2-1.3 2.6 .5 .2 1.5-2.8-1.1-2 1.4-2.5z"/></svg>'
            '<span>wykonanie: <b>Wylinka</b></span></a>')
 
+SLOGAN = {"en": "Every line of your BOM, answered.", "pl": "Każda pozycja listy z odpowiedzią."}
+
 # ---------------------------------------------------------------- JSON-LD
 def org_ld():
     return {
@@ -171,7 +173,7 @@ def inline_css():
     """whole stylesheet inlined (no render-blocking request); font urls rewritten per page depth"""
     global _CSS
     if _CSS is None:
-        css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
+        css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8") + chr(10) + (SRC / "brand.css").read_text(encoding="utf-8")
         css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
         css = re.sub(r"\s*\n\s*", "", css)
         css = re.sub(r"\s*([{};>])\s*", r"\1", css).replace(";}", "}")
@@ -275,7 +277,8 @@ def footer():
     return f'''<footer class="foot">
   <div class="wrap foot-grid">
     <div class="foot-brand">
-      <a class="logo" href="{rel(P("home"))}"><img src="{asset(logo_file(True))}" width="{round(wl)}" height="{round(hl)}" alt="GP ENERGIA"></a>
+      <a class="logo" href="{rel(P("home"))}"><img src="{asset(logo_file(True))}" width="{round(wl)}" height="{round(hl)}" alt="GP ENERGIA" loading="lazy"></a>
+      <p class="foot-slogan">{SLOGAN[L]}</p>
       <p>{esc(t["foot_desc"])}</p>
     </div>
     <nav aria-label="{esc(c1)}"><h2>{esc(c1)}</h2><ul>{off}</ul></nav>
@@ -289,17 +292,49 @@ def footer():
   <div class="wrap foot-legal">
     <p>{COMPANY["legal"]} · KRS {COMPANY["krs"]} · NIP {COMPANY["nip"]} · REGON {COMPANY["regon"]}</p>
     <p>{esc(t["foot_note"])}</p>
-    <p class="foot-last"><span>© 2026 {COMPANY["legal"]}</span><a href="{other}" hreflang="{"pl" if L == "en" else "en"}" lang="{"pl" if L == "en" else "en"}">{t["foot_switch"]}</a>{WYLINKA}</p>
+    <p class="foot-last"><span>© 2026 {COMPANY["legal"]}</span><a href="{other}" hreflang="{"pl" if L == "en" else "en"}" lang="{"pl" if L == "en" else "en"}">{t["foot_switch"]}</a><button type="button" class="ck-open" data-ck-open>{CK[L]["link"]}</button>{WYLINKA}</p>
   </div>
 </footer>
 <div class="mob" id="mob" aria-hidden="true">
   <a class="mob-mail" href="mailto:{EMAIL}" tabindex="-1">{I_MAIL}{t["mob_mail"]}</a>
   <a class="mob-cta" href="{rel(P("contact"))}#rfq" tabindex="-1">{t["mob_cta"]}</a>
 </div>
+{cookie_banner()}
 <script src="{asset('assets/site.js')}?v={VER}" defer></script>
 </body>
 </html>
 '''
+
+CK = {
+ "en": {"link": "Cookie settings", "h": "Cookies on this website",
+        "p": "We use only the cookies needed for the site to work and, if you agree, Google Maps on the contact page. We do not use analytics or advertising cookies.",
+        "all": "Accept all", "nec": "Necessary only", "set": "Settings", "save": "Save choice",
+        "c1": "Necessary", "c1d": "Remember your cookie choice. Always on.",
+        "c2": "External media", "c2d": "Google Maps on the contact page (Google may set its own cookies).",
+        "more": "Privacy policy"},
+ "pl": {"link": "Ustawienia cookies", "h": "Pliki cookies na tej stronie",
+        "p": "Używamy tylko plików cookies niezbędnych do działania strony, a za Twoją zgodą także Map Google na stronie kontaktu. Nie używamy cookies analitycznych ani reklamowych.",
+        "all": "Akceptuję wszystkie", "nec": "Tylko niezbędne", "set": "Ustawienia", "save": "Zapisz wybór",
+        "c1": "Niezbędne", "c1d": "Zapamiętanie Twojego wyboru cookies. Zawsze włączone.",
+        "c2": "Media zewnętrzne", "c2d": "Mapa Google na stronie kontaktu (Google może zapisać własne cookies).",
+        "more": "Polityka prywatności"},
+}
+
+def cookie_banner():
+    L = C.lang; k = CK[L]
+    return f"""<div class="ck" id="ck" role="dialog" aria-modal="false" aria-labelledby="ck-h" hidden>
+  <p class="ck-h" id="ck-h">{k["h"]}</p>
+  <p class="ck-p">{k["p"]} <a href="{rel(P("privacy"))}#cookies">{k["more"]}</a></p>
+  <div class="ck-set" id="ck-set" hidden>
+    <label class="ck-row"><input type="checkbox" checked disabled><span><b>{k["c1"]}</b> {k["c1d"]}</span></label>
+    <label class="ck-row"><input type="checkbox" id="ck-media"><span><b>{k["c2"]}</b> {k["c2d"]}</span></label>
+  </div>
+  <div class="ck-act">
+    <button type="button" class="btn ck-all" data-ck="all">{k["all"]}</button>
+    <button type="button" class="ck-btn" data-ck="nec">{k["nec"]}</button>
+    <button type="button" class="ck-btn ck-more" data-ck="set" data-save="{k["save"]}">{k["set"]}</button>
+  </div>
+</div>"""
 
 def crumbs(items):
     t = tr()
@@ -344,9 +379,9 @@ def render(pid, lang, body, extra_ld=None, path=None, alt=None, title=None, desc
 def cta_band():
     L = C.lang
     if L == "en":
-        h, p, b = "Ask for price and availability", "Send part numbers or attach your BOM file. We reply with prices, lead times and any alternatives, often within 1-6 hours.", "Send your BOM"
+        h, p, b = SLOGAN["en"], "Send part numbers or attach your BOM file. We reply with prices, lead times and any alternatives, often within 1-6 hours.", "Send your BOM"
     else:
-        h, p, b = "Zapytaj o cenę i dostępność", "Wyślij kody produktów albo dołącz plik BOM. Odpowiemy z cenami, terminami dostaw i ewentualnymi zamiennikami, często w ciągu 1-6 godzin.", "Wyślij listę BOM"
+        h, p, b = SLOGAN["pl"], "Wyślij kody produktów albo dołącz plik BOM. Odpowiemy z cenami, terminami dostaw i ewentualnymi zamiennikami, często w ciągu 1-6 godzin.", "Wyślij listę BOM"
     return f'''<section class="ctaband" aria-labelledby="h-cta">
   <div class="wrap ctaband-in">
     <div><h2 id="h-cta">{h}</h2><p>{p}</p></div>
@@ -357,17 +392,18 @@ def cta_band():
 def bom_table(caption_extra=True):
     L = C.lang
     if L == "en":
-        cap, sub, cols = "Sample BOM", "Excerpt from an industrial project", ("No.", "Item", "Manufacturer", "Part number", "Qty")
+        cap, sub, cols = "Sample BOM", "Excerpt from an industrial project. Every line comes back with price, lead time and alternative.", ("No.", "Item", "Manufacturer", "Part number", "Qty", "Quote")
     else:
-        cap, sub, cols = "Przykładowy BOM", "Fragment listy z projektu przemysłowego", ("Lp.", "Pozycja", "Producent", "Kod produktu", "Ilość")
+        cap, sub, cols = "Przykładowy BOM", "Fragment listy z projektu przemysłowego. Każda pozycja wraca z ceną, terminem i zamiennikiem.", ("Lp.", "Pozycja", "Producent", "Kod produktu", "Ilość", "Oferta")
+    qt_lbl = "price, lead time, alternative" if L == "en" else "cena, termin, zamiennik"
     rows = "".join(
-        f'<tr><td class="n">{i+1}</td><td><b>{esc(r[0] if L=="en" else r[2])}</b><span>{esc(r[1] if L=="en" else r[3])}</span></td><td>{esc(r[4])}</td><td class="pn">{esc(r[5])}</td><td class="q">{r[6]}</td></tr>'
+        f'<tr><td class="n">{i+1}</td><td><b>{esc(r[0] if L=="en" else r[2])}</b><span>{esc(r[1] if L=="en" else r[3])}</span></td><td>{esc(r[4])}</td><td class="pn">{esc(r[5])}</td><td class="q">{r[6]}</td><td class="qt"><span class="dash3" role="img" aria-label="{qt_lbl}"><i></i><i></i><i></i></span></td></tr>'
         for i, r in enumerate(BOM))
     return f'''<figure class="bomsheet">
   <div class="bomsheet-scroll" tabindex="0" role="region" aria-label="{cap}">
   <table>
     <caption><b>{cap}</b> <span>{sub}</span></caption>
-    <thead><tr>{"".join(f'<th scope="col"{" class=" + chr(34) + c + chr(34) if c else ""}>{h}</th>' for h, c in zip(cols, ("n", "", "", "", "q")))}</tr></thead>
+    <thead><tr>{"".join(f'<th scope="col"{" class=" + chr(34) + c + chr(34) if c else ""}>{h}</th>' for h, c in zip(cols, ("n", "", "", "", "q", "qt")))}</tr></thead>
     <tbody>{rows}</tbody>
   </table>
   </div>
@@ -456,12 +492,12 @@ def page_home(L):
         loc = "B2B supplier of industrial automation and electrical components · Długołęka near Wrocław, Poland"
         lead = "PLCs, HMIs, sensors, contactors, power supplies and switchgear from the original manufacturers. Send the whole bill of materials and get one quote with prices, lead times and alternatives, shipped from European stock."
         cta, strip_t = "Send your BOM", "Genuine products from more than 40 manufacturers, including"
-        spec = "Quotes often within 1-6 hours · orders from EUR 100 · EXW, FCA or DAP · shipping worldwide"
+        three = ("For every line of your list", [("Price", "from European stock"), ("Lead time", "stated per line"), ("Alternative", "only if you allow it")])
     else:
         loc = "Hurtowy dostawca komponentów automatyki i elektrotechniki · Długołęka k. Wrocławia"
         lead = "PLC, HMI, czujniki, styczniki, zasilacze i aparatura rozdzielcza od oryginalnych producentów. Wyślij całą listę materiałową, a dostaniesz jedną ofertę z cenami, terminami i zamiennikami, z dostawą z magazynów w Europie."
         cta, strip_t = "Wyślij listę BOM", "Oryginalne produkty ponad 40 producentów, m.in."
-        spec = "Oferta często w 1-6 godzin · zamówienia od 100 EUR · EXW, FCA albo DAP · wysyłka na cały świat"
+        three = ("Dla każdej pozycji listy", [("Cena", "z magazynów w Europie"), ("Termin", "podany przy pozycji"), ("Zamiennik", "tylko gdy go dopuszczasz")])
     strip = "".join(f'<li>{brand_img(s, n)}</li>' for s, n in LOGOS if s in STRIP)
     hero = f'''<section class="hero" aria-labelledby="h1">
   <div class="hero-main wrap">
@@ -471,7 +507,7 @@ def page_home(L):
       <h1 id="h1">{esc(m["h1"])}</h1>
       <p class="lead">{esc(lead)}</p>
       <div class="hero-cta" id="heroCta"><a class="btn btn-lg" href="{rel(P("contact"))}#rfq">{cta}{I_ARROW}</a><a class="mail-link" href="mailto:{EMAIL}">{I_MAIL}{EMAIL}</a></div>
-      <p class="hero-spec">{esc(spec)}</p>
+      <div class="hero-three"><p>{esc(three[0])}:</p><ul>{"".join(f'<li><i aria-hidden="true"></i><b>{esc(a)}</b> <span>{esc(b)}</span></li>' for a, b in three[1])}</ul></div>
     </div>
   </div>
   <div class="strip">
@@ -935,14 +971,16 @@ def page_contact(L):
   <p>{F["ok_p"]} <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
 </div>'''
     c = COMPANY
-    osm = f"https://www.openstreetmap.org/export/embed.html?bbox={c['lon']-0.012:.4f}%2C{c['lat']-0.0055:.4f}%2C{c['lon']+0.012:.4f}%2C{c['lat']+0.0055:.4f}&amp;layer=mapnik&amp;marker={c['lat']}%2C{c['lon']}"
+    gembed = "https://maps.google.com/maps?q=Polna+29%2C+55-095+D%C5%82ugo%C5%82%C4%99ka&amp;z=15&amp;hl=" + L + "&amp;output=embed"
+    groute = "https://www.google.com/maps/dir/?api=1&amp;destination=Polna+29%2C+55-095+D%C5%82ugo%C5%82%C4%99ka"
     gmap = "https://www.google.com/maps/search/?api=1&amp;query=Polna+29%2C+55-095+D%C5%82ugo%C5%82%C4%99ka"
     side = f'''<aside class="contact-side" aria-labelledby="h-side">
   <h2 id="h-side">{F["side_h"]}</h2>
   <p class="big-mail"><a href="mailto:{EMAIL}">{EMAIL}</a></p>
   <h3>{F["addr_h"]}</h3>
   <p>{c["legal"]}<br>{c["street"]}<br>{c["postcode"]} {c["city"]}, {"Poland" if L=="en" else "Polska"}</p>
-  <div class="map"><iframe title="{F["map_t"]}" src="{osm}" loading="lazy" referrerpolicy="no-referrer"></iframe></div>
+  <div class="map" data-map><iframe title="{F["map_t"]}" src="{gembed}" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    <div class="map-off"><p><b>{c["street"]}</b><br>{c["postcode"]} {c["city"]}</p><p><a class="btn" href="{groute}" target="_blank" rel="noopener">{"Get directions" if L=="en" else "Wyznacz trasę"}</a></p><p class="small">{"The map is off because external media are disabled in" if L=="en" else "Mapa jest wyłączona, bo media zewnętrzne są wyłączone w"} <button type="button" class="ck-open" data-ck-open>{CK[L]["link"].lower()}</button>.</p></div></div>
   <p><a class="txt-link" href="{gmap}" target="_blank" rel="noopener">{F["map_l"]}{I_ARROW}</a></p>
   <h3>{F["reg_h"]}</h3>
   <p class="small">KRS {c["krs"]} · NIP {c["nip"]} · REGON {c["regon"]}</p>
@@ -971,11 +1009,14 @@ def page_privacy(L):
 <p>If an order is shipped outside the European Economic Area, the delivery data needed for shipping and customs is passed to the carrier and the recipient's customs authorities.</p>
 <h2>Your rights</h2>
 <p>You have the right to access your data, to have it corrected or deleted, to restrict processing, to data portability and to object to processing based on our legitimate interest. You can also lodge a complaint with the President of the Personal Data Protection Office (UODO), ul. Stawki 2, 00-193 Warsaw.</p>
-<h2>Cookies and external services</h2>
-<p>This website does not use analytics or advertising cookies. The map on the contact page is provided by OpenStreetMap; when it loads, your browser connects to OpenStreetMap servers, which receive your IP address.</p>
+<h2 id="cookies">Cookies and external services</h2>
+<p>Cookies are small files saved by your browser. This website does not use analytics or advertising cookies. We use:</p>
+<ul><li><strong>necessary storage</strong>: your cookie choice is saved in your browser for 12 months, so the banner does not appear on every page (legal basis: our legitimate interest, Article 6(1)(f) GDPR);</li>
+<li><strong>external media</strong>: the map on the contact page is provided by Google Maps (Google Ireland Ltd.). When it loads, your browser connects to Google servers, which receive your IP address and may set their own cookies, as described in the Google privacy policy. If you choose "Necessary only", the map is not loaded and you see the address and a directions link instead.</li></ul>
+<p>You can change or withdraw your choice at any time using the "Cookie settings" link in the footer, and you can also delete cookies in your browser settings.</p>
 <h2>Changes</h2>
 <p>We may update this policy, for example when we add new features to the website. The current version is always published on this page.</p>
-<p class="small">Last updated: 5 November 2026.</p>'''
+<p class="small">Last updated: 6 November 2026.</p>'''
     else:
         lead = "Polityka wyjaśnia, jak przetwarzamy dane osobowe przesłane przez formularz zapytania lub pocztą elektroniczną."
         txt = f'''<h2>Administrator danych</h2>
@@ -991,11 +1032,14 @@ def page_privacy(L):
 <p>Jeśli zamówienie jest wysyłane poza Europejski Obszar Gospodarczy, dane potrzebne do wysyłki i odprawy celnej otrzymują przewoźnik i organy celne kraju odbiorcy.</p>
 <h2>Twoje prawa</h2>
 <p>Masz prawo dostępu do danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia danych oraz sprzeciwu wobec przetwarzania opartego na naszym prawnie uzasadnionym interesie. Możesz też wnieść skargę do Prezesa Urzędu Ochrony Danych Osobowych, ul. Stawki 2, 00-193 Warszawa.</p>
-<h2>Pliki cookies i usługi zewnętrzne</h2>
-<p>Strona nie używa analitycznych ani reklamowych plików cookies. Mapę na stronie kontaktu dostarcza OpenStreetMap; po jej wczytaniu przeglądarka łączy się z serwerami OpenStreetMap, które otrzymują Twój adres IP.</p>
+<h2 id="cookies">Pliki cookies i usługi zewnętrzne</h2>
+<p>Pliki cookies to niewielkie pliki zapisywane przez przeglądarkę. Strona nie używa analitycznych ani reklamowych plików cookies. Korzystamy z:</p>
+<ul><li><strong>niezbędnego zapisu w przeglądarce</strong>: Twój wybór dotyczący cookies przechowujemy przez 12 miesięcy, żeby baner nie pojawiał się na każdej stronie (podstawa: nasz prawnie uzasadniony interes, art. 6 ust. 1 lit. f RODO);</li>
+<li><strong>mediów zewnętrznych</strong>: mapę na stronie kontaktu dostarczają Mapy Google (Google Ireland Ltd.). Po jej wczytaniu przeglądarka łączy się z serwerami Google, które otrzymują Twój adres IP i mogą zapisać własne pliki cookies zgodnie z polityką prywatności Google. Po wybraniu „Tylko niezbędne” mapa nie jest wczytywana, a w jej miejscu widać adres i link do wyznaczenia trasy.</li></ul>
+<p>Wybór możesz w każdej chwili zmienić lub wycofać przez link „Ustawienia cookies” w stopce strony, a pliki cookies możesz też usunąć w ustawieniach przeglądarki.</p>
 <h2>Zmiany</h2>
 <p>Możemy aktualizować politykę, np. gdy dodamy nowe funkcje strony. Aktualna wersja jest zawsze publikowana na tej stronie.</p>
-<p class="small">Ostatnia aktualizacja: 5 listopada 2026 r.</p>'''
+<p class="small">Ostatnia aktualizacja: 6 listopada 2026 r.</p>'''
     ph = page_head(m["h1"], esc(lead), [(t["home"], P("home")), (t["foot_privacy"], P("privacy"))])
     body = ph + f'<section class="sec"><div class="wrap narrow prose">{txt}</div></section>'
     render("privacy", L, body, [crumbs_ld([(t["home"], P("home")), (t["foot_privacy"], P("privacy"))])])

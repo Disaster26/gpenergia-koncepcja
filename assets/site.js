@@ -41,20 +41,48 @@
     hideOver.forEach(function (el) { io.observe(el); });
   }
 
-  // scroll reveal: only elements starting below the fold, transform/opacity only
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduce && 'IntersectionObserver' in window) {
-    var sel = '.sec-head, .sec-dark h2, .export-txt, .cat, .svc li, .case-row, .post, .split-txt > h2, .facts, .timeline li, .pgroup, .case, .svc-row, .bomsheet, .logowall, .bgroup, .faq, .ctaband-in, .subsec';
-    var vh = window.innerHeight;
-    var rio = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -8% 0px' });
-    d.querySelectorAll(sel).forEach(function (el) {
-      if (el.getBoundingClientRect().top > vh * 0.92) { el.classList.add('rv'); rio.observe(el); }
+  // BOM sheet: the three dashes of every line "close" when the sheet comes into view (decorative only, content always visible)
+  var sheets = d.querySelectorAll('.bomsheet');
+  if (sheets.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var sio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('go'); sio.unobserve(e.target); } });
+    }, { threshold: 0.35 });
+    sheets.forEach(function (el) { if (el.getBoundingClientRect().top > window.innerHeight * 0.8) { el.classList.add('anim'); sio.observe(el); } });
+  }
+
+  // cookies: necessary + external media (Google Maps); choice kept 12 months
+  var CK_KEY = 'gpe_ck', ck = d.getElementById('ck');
+  function getCk() {
+    try { var v = JSON.parse(localStorage.getItem(CK_KEY) || 'null'); if (v && v.exp > Date.now()) return v; } catch (e) {}
+    var m = d.cookie.match(/(?:^|; )gpe_ck=([^;]+)/); if (m) { try { return JSON.parse(decodeURIComponent(m[1])); } catch (e) {} }
+    return null;
+  }
+  function applyCk(v) {
+    var media = !v || v.media; // map loads right away; hidden only after "necessary only"
+    d.querySelectorAll('[data-map]').forEach(function (m) { m.classList.toggle('off', !media); var f = m.querySelector('iframe'); if (f && !media) { f.dataset.src = f.dataset.src || f.src; f.removeAttribute('src'); } else if (f && media && f.dataset.src && !f.getAttribute('src')) { f.src = f.dataset.src; } });
+  }
+  function saveCk(media) {
+    var v = { media: !!media, exp: Date.now() + 365 * 864e5 };
+    try { localStorage.setItem(CK_KEY, JSON.stringify(v)); } catch (e) {}
+    d.cookie = CK_KEY + '=' + encodeURIComponent(JSON.stringify(v)) + '; max-age=31536000; path=/; SameSite=Lax';
+    applyCk(v); if (ck) ck.hidden = true;
+  }
+  if (ck) {
+    var state = getCk(); applyCk(state);
+    var ckSet = d.getElementById('ck-set'), mediaIn = d.getElementById('ck-media');
+    if (!state) ck.hidden = false;
+    ck.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-ck]'); if (!b) return;
+      var k = b.dataset.ck;
+      if (k === 'all') saveCk(true);
+      else if (k === 'nec') saveCk(false);
+      else if (k === 'set') {
+        if (ckSet.hidden) { ckSet.hidden = false; mediaIn.checked = !state || !!state.media; b.textContent = b.dataset.save; }
+        else saveCk(mediaIn.checked);
+      }
     });
-    // stagger siblings in grids
-    d.querySelectorAll('.cats, .svc, .posts, .cases').forEach(function (g) {
-      Array.prototype.forEach.call(g.children, function (c, i) { c.style.transitionDelay = (i % 3) * 80 + 'ms'; });
+    d.addEventListener('click', function (e) {
+      if (e.target.closest('[data-ck-open]')) { state = getCk(); ck.hidden = false; ckSet.hidden = false; mediaIn.checked = !state || !!state.media; var mb = ck.querySelector('.ck-more'); mb.textContent = mb.dataset.save; ck.querySelector('.ck-all').focus(); }
     });
   }
 
