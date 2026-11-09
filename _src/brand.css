@@ -299,4 +299,5 @@
 @media (max-width:389px){.top .logo img{height:22px}}
 @media (min-width:760px){.top .logo img{height:30px}}
 @media (min-width:1100px){.top .logo img{height:36px}}
+@media (min-width:390px) and (max-width:419px){.top-in{gap:10px}.top .logo img{height:24px}}
 .foot .logo img{height:32px}
