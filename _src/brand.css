@@ -350,7 +350,7 @@
 .foot :focus-visible{outline-color:var(--green-ui)}
 /* offer without the obsolete-parts service: 3 services, 2 guides - grids close evenly */
 @media (min-width:960px){.svc:has(>li:nth-child(3):last-child){grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (min-width:700px){.posts:not(.posts-index):has(>li:nth-child(2):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:700px){.posts:has(>li:nth-child(2):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* logo v2 (09.11) in the white header */
 @media (min-width:390px){.top .logo img{height:26px}}
 @media (max-width:389px){.top .logo img{height:22px}}
