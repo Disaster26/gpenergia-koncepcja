@@ -101,7 +101,7 @@ def logo_file(white=False):
     new = ROOT / "img" / ("logo-gpenergia-white.svg" if white else "logo-gpenergia.svg")
     if new.exists():
         return "img/" + new.name
-    return "img/logo/gpenergia-1-ciemne.svg" if white else "img/logo/gpenergia-1-jasne.svg"
+    return "img/logo/gpenergia-ciemne.svg" if white else "img/logo/gpenergia-jasne.svg"
 
 def svg_size(p):
     try:
@@ -161,7 +161,7 @@ def org_ld():
         "contactPoint": {"@type": "ContactPoint", "contactType": "sales", "email": EMAIL,
                          "availableLanguage": ["English", "Polish", "Russian"]},
         "areaServed": ["Europe", "United States", "Asia", "Middle East", "Africa"],
-        "knowsAbout": ["BOM sourcing", "industrial automation components", "electrical components", "obsolete parts sourcing", "export logistics"],
+        "knowsAbout": ["BOM sourcing", "industrial automation components", "electrical components", "project supply", "export logistics"],
     }
 
 def crumbs_ld(items):
@@ -241,7 +241,7 @@ def header():
     en_p, pl_p = C.alt
     lang = (f'<a href="{rel(en_p)}" hreflang="en" lang="en"{" aria-current=" + chr(34) + "true" + chr(34) if L == "en" else ""}>EN</a>'
             f'<a href="{rel(pl_p)}" hreflang="pl" lang="pl"{" aria-current=" + chr(34) + "true" + chr(34) if L == "pl" else ""}>PL</a>')
-    lw, lh = svg_size(logo_file(True))
+    lw, lh = svg_size(logo_file())
     return f'''<body class="p-{C.pid}">
 <a class="skip" href="#main">{t["skip"]}</a>
 <div class="util">
@@ -252,7 +252,7 @@ def header():
 </div>
 <header class="top" id="top">
   <div class="wrap top-in">
-    <a class="logo" href="{rel(P("home"))}" aria-label="GP ENERGIA - {esc(t["home"])}"><img src="{asset(logo_file(True))}" width="{round(lw)}" height="{round(lh)}" alt="GP ENERGIA"></a>
+    <a class="logo" href="{rel(P("home"))}" aria-label="GP ENERGIA - {esc(t["home"])}"><img src="{asset(logo_file())}" width="{round(lw)}" height="{round(lh)}" alt="GP ENERGIA"></a>
     <nav class="menu" id="menu" aria-label="{"Main" if L == "en" else "Menu główne"}">
       {nav}
       <div class="menu-extra">
@@ -271,18 +271,17 @@ def footer():
     c1, c2, c3 = t["foot_cols"]
     off = "".join(f'<li><a href="{rel(P("products"))}#{c["id"]}">{esc(c[L]["t"])}</a></li>' for c in CATEGORIES[:4])
     serv = ([("services", "BOM sourcing" if L == "en" else "Wycena list BOM", "#bom"),
-             ("services", "Obsolete parts" if L == "en" else "Części wycofane", "#obsolete"),
              ("services", "Logistics and export" if L == "en" else "Logistyka i eksport", "#export")])
     off += "".join(f'<li><a href="{rel(P(p))}{h}">{esc(n)}</a></li>' for p, n, h in serv)
     comp = "".join(f'<li><a href="{rel(P(p))}">{esc(n)}</a></li>' for p, n in t["nav"] if p in ("about", "references", "products", "blog")) + \
         f'<li><a href="{rel(P("privacy"))}">{t["foot_privacy"]}</a></li>'
     en_p, pl_p = C.alt
     other = rel(pl_p if L == "en" else en_p)
-    wl, hl = svg_size(logo_file(True))
+    wl, hl = svg_size(logo_file())
     return f'''<footer class="foot">
   <div class="wrap foot-grid">
     <div class="foot-brand">
-      <a class="logo" href="{rel(P("home"))}"><img src="{asset(logo_file(True))}" width="{round(wl)}" height="{round(hl)}" alt="GP ENERGIA" loading="lazy"></a>
+      <a class="logo" href="{rel(P("home"))}"><img src="{asset(logo_file())}" width="{round(wl)}" height="{round(hl)}" alt="GP ENERGIA" loading="lazy"></a>
       <p class="foot-slogan">{SLOGAN[L]}</p>
       <p>{esc(t["foot_desc"])}</p>
     </div>
@@ -480,7 +479,6 @@ def default_faq(lang):
             ("In what format can I send my BOM?", "Send an xlsx, xls, csv or pdf file through the form on the contact page or by e-mail to info@gpenergia.com.pl. A list of part numbers with quantities pasted into the message works too."),
             ("How quickly do you reply?", "We often send a quote within 1-6 hours. Long lists with many brands or parts that need an alternative can take longer, and we tell you when to expect the answer."),
             ("What order size do you handle?", "From orders of about EUR 100 up to BOMs worth several hundred thousand euros."),
-            ("Can you find discontinued or hard-to-find parts?", "Yes. We check availability with distributors, manufacturers and independent suppliers across Europe, and where the original is no longer available we propose a technically compliant alternative for your approval."),
             ("Do you ship outside the EU?", "Yes. We deliver across Europe, to the United States, Asia, the Middle East and Africa on EXW, FCA or DAP terms, by DHL, FedEx, UPS or pallet freight."),
             ("Are the products genuine?", "We supply genuine products from established manufacturers only, such as Siemens, Schneider Electric, ABB, Phoenix Contact and Rittal."),
         ]
@@ -488,7 +486,6 @@ def default_faq(lang):
         ("W jakim formacie wysłać listę BOM?", "Plik xlsx, xls, csv albo pdf przez formularz na stronie kontaktu lub e-mailem na info@gpenergia.com.pl. Wystarczy też lista kodów produktów z ilościami wklejona w treść wiadomości."),
         ("Jak szybko odpowiadacie?", "Ofertę często wysyłamy w ciągu 1-6 godzin. Długie listy z wieloma markami albo pozycjami wymagającymi zamiennika mogą potrwać dłużej i wtedy podajemy, kiedy spodziewać się odpowiedzi."),
         ("Jakiej wielkości zamówienia obsługujecie?", "Od zamówień za około 100 EUR po listy BOM o wartości kilkuset tysięcy euro."),
-        ("Czy znajdziecie części wycofane z produkcji?", "Tak. Sprawdzamy dostępność u dystrybutorów, producentów i niezależnych dostawców w całej Europie, a gdy oryginał nie jest już dostępny, proponujemy zgodny technicznie zamiennik do akceptacji."),
         ("Czy wysyłacie poza Unię Europejską?", "Tak. Dostarczamy w Europie, do Stanów Zjednoczonych, Azji, na Bliski Wschód i do Afryki na warunkach EXW, FCA albo DAP, kurierem DHL, FedEx, UPS lub spedycją paletową."),
         ("Czy produkty są oryginalne?", "Dostarczamy wyłącznie oryginalne produkty uznanych producentów, takich jak Siemens, Schneider Electric, ABB, Phoenix Contact i Rittal."),
     ]
@@ -576,13 +573,11 @@ def page_home(L):
     if L == "en":
         sv_h = "How we work with buyers and engineers"
         sv = [("bom", "BOM sourcing", "One quote for the complete list, with lead times per line and alternatives where you allow them."),
-              ("obsolete", "Obsolete and hard-to-find parts", "We search distributors, manufacturers and independent suppliers across Europe and propose compliant replacements."),
               ("project", "Project supply", "For prefabricators, integrators, OEMs and general contractors: 50-300 line lists consolidated into one delivery."),
               ("export", "Logistics and export", "EXW, FCA or DAP. Courier or pallet freight to Europe, the US, Asia, the Middle East and Africa.")]
     else:
         sv_h = "Jak pracujemy z zaopatrzeniem i inżynierami"
         sv = [("bom", "Wycena list BOM", "Jedna oferta na całą listę, z terminem dla każdej pozycji i zamiennikami tam, gdzie je dopuszczasz."),
-              ("obsolete", "Części wycofane i trudno dostępne", "Szukamy u dystrybutorów, producentów i niezależnych dostawców w całej Europie i proponujemy zgodne zamienniki."),
               ("project", "Dostawy projektowe", "Dla prefabrykatorów, integratorów, OEM i generalnych wykonawców: listy na 50-300 pozycji w jednej dostawie."),
               ("export", "Logistyka i eksport", "EXW, FCA albo DAP. Kurier lub spedycja paletowa do Europy, USA, Azji, na Bliski Wschód i do Afryki.")]
     svc = "".join(f'<li><h3><a href="{rel(P("services"))}#{a}">{esc(t)}</a></h3><p>{esc(d)}</p></li>' for a, t, d in sv)
@@ -691,37 +686,25 @@ SVC = {
   "en": {"lead": "A BOM (bill of materials) is the complete list of components needed to build an electrical panel, a control system or an automation solution. Send it as it is, from ERP, EPLAN, a spreadsheet or a PDF, and get one quote for every line, with price, lead time and alternatives where they help.",
          "nav": "BOM sourcing",
          "sec": [("What a good BOM includes", "<ul class=ticks><li>manufacturer or brand,</li><li>full part number, e.g. 6ES7212-1BE40-0XB0,</li><li>a short technical description and quantity,</li><li>whether alternatives are allowed and which certificates are required,</li><li>delivery address and date, or Incoterms.</li></ul><p>The full checklist is in our guide <a href='{blog_bom}'>what to include in a BOM request</a>.</p>"),
-                 ("What we do with your list", "<ul class=ticks><li>review and check every line,</li><li>propose direct or equivalent alternatives where the original is slow, expensive or discontinued, always marked next to the original,</li><li>handle mixed-brand requests (PLC, HMI, sensors, wiring) in one order,</li><li>source from suppliers in the EU with short lead times,</li><li>consolidate the delivery and invoice it once.</li></ul>"),
+                 ("What we do with your list", "<ul class=ticks><li>review and check every line,</li><li>propose direct or equivalent alternatives where the original is slow or expensive, always marked next to the original,</li><li>handle mixed-brand requests (PLC, HMI, sensors, wiring) in one order,</li><li>source from suppliers in the EU with short lead times,</li><li>consolidate the delivery and invoice it once.</li></ul>"),
                  ("Numbers worth knowing", "<p>Quotes often within 1-6 hours. Orders from EUR 100 up to BOMs worth several hundred thousand euros. Lists of 50-300 lines are routine.</p>")],
          "aside": "bom"},
   "pl": {"lead": "BOM (bill of materials, lista materiałowa) to pełna lista komponentów potrzebnych do zbudowania rozdzielnicy, układu sterowania albo instalacji automatyki. Wyślij ją w takiej postaci, w jakiej ją masz, z ERP, EPLAN, arkusza albo PDF, a dostaniesz jedną ofertę na wszystkie pozycje, z ceną, terminem i zamiennikami tam, gdzie się przydadzą.",
          "nav": "Wycena list BOM",
          "sec": [("Co powinna zawierać dobra lista BOM", "<ul class=ticks><li>producenta lub markę,</li><li>pełny numer katalogowy, np. 6ES7212-1BE40-0XB0,</li><li>krótki opis techniczny i ilość,</li><li>informację, czy dopuszczasz zamienniki i jakie certyfikaty są wymagane,</li><li>adres i termin dostawy albo warunki Incoterms.</li></ul><p>Pełna lista kontrolna jest w poradniku <a href='{blog_bom}'>co zawrzeć w zapytaniu z listą BOM</a>.</p>"),
-                 ("Co robimy z Twoją listą", "<ul class=ticks><li>sprawdzamy każdą pozycję,</li><li>proponujemy zamienniki bezpośrednie lub równoważne, gdy oryginał ma długi termin, jest drogi albo wycofany, zawsze oznaczone obok oryginału,</li><li>łączymy wiele marek (PLC, HMI, czujniki, osprzęt) w jednym zamówieniu,</li><li>kupujemy u dostawców w UE z krótkim terminem,</li><li>konsolidujemy dostawę i wystawiamy jedną fakturę.</li></ul>"),
+                 ("Co robimy z Twoją listą", "<ul class=ticks><li>sprawdzamy każdą pozycję,</li><li>proponujemy zamienniki bezpośrednie lub równoważne, gdy oryginał ma długi termin albo jest drogi, zawsze oznaczone obok oryginału,</li><li>łączymy wiele marek (PLC, HMI, czujniki, osprzęt) w jednym zamówieniu,</li><li>kupujemy u dostawców w UE z krótkim terminem,</li><li>konsolidujemy dostawę i wystawiamy jedną fakturę.</li></ul>"),
                  ("Liczby", "<p>Wycena często w 1-6 godzin. Zamówienia od 100 EUR po listy BOM o wartości kilkuset tysięcy euro. Listy po 50-300 pozycji to dla nas codzienność.</p>")],
          "aside": "bom"}},
- "service_obsolete": {
-  "img": "gauges",
-  "en": {"lead": "When a manufacturer discontinues a PLC module, a relay or a fire panel, the installed base does not disappear. Plants and buildings still run on it, and a single missing part can stop a line or hold up a handover.",
-         "nav": "Obsolete parts",
-         "sec": [("Two ways we solve it", "<h3>Find the original</h3><p>We search remaining stock at distributors, manufacturers and independent suppliers across Europe, and tell you the condition and origin of every item.</p><h3>Replace it properly</h3><p>If the original is gone or too risky, we propose a compatible alternative and send the documentation, so your engineer can check fit, function and wiring before ordering.</p>"),
-                 ("Typical requests", "<p>Discontinued PLC CPUs and I/O modules, HMI panels, safety relays, communication modules, detectors and control units from alarm, BMS and fire systems.</p>"),
-                 ("Example", "<p>A general contractor upgrading BMS and fire alarm systems from 2005-2010 found that the design relied on relays, detectors and control panels no longer made. Working with a systems integrator in a consortium, we proposed a new system concept that was technically compliant, ready to install and cheaper than planned. <a href='{ref3}'>Read the case</a>.</p><p>Guide: <a href='{blog_obs}'>how to source obsolete automation components safely</a>.</p>")]},
-  "pl": {"lead": "Gdy producent wycofuje moduł PLC, przekaźnik albo centralę ppoż., zainstalowane urządzenia nadal pracują. Zakłady i budynki dalej na nich działają, a brak jednej części potrafi zatrzymać linię albo opóźnić odbiór obiektu.",
-         "nav": "Części wycofane",
-         "sec": [("Dwa sposoby", "<h3>Znaleźć oryginał</h3><p>Szukamy pozostałych zapasów u dystrybutorów, producentów i niezależnych dostawców w Europie i podajemy stan oraz pochodzenie każdej pozycji.</p><h3>Dobrać zamiennik</h3><p>Jeśli oryginału nie ma albo ryzyko jest zbyt duże, proponujemy zgodny zamiennik i przesyłamy dokumentację, żeby projektant sprawdził wymiary, funkcje i podłączenie przed zamówieniem.</p>"),
-                 ("Najczęstsze zapytania", "<p>Wycofane jednostki centralne PLC i moduły wejść/wyjść, panele HMI, przekaźniki bezpieczeństwa, moduły komunikacyjne, czujki i moduły kontrolno-sterujące systemów alarmowych, BMS i ppoż.</p>"),
-                 ("Przykład", "<p>Generalny wykonawca modernizował systemy BMS i sygnalizacji pożaru z lat 2005-2010. Projekt opierał się na przekaźnikach, czujkach i centralach, których już nie produkowano. W konsorcjum z integratorem zaproponowaliśmy nową koncepcję systemu: zgodną technicznie, gotową do montażu i tańszą od założeń. <a href='{ref3}'>Zobacz realizację</a>.</p><p>Poradnik: <a href='{blog_obs}'>części automatyki wycofane z produkcji - jak kupić bezpiecznie</a>.</p>")]}},
  "service_project": {
   "img": "breakers",
   "en": {"lead": "Switchboard prefabrication, plant retrofits and building system upgrades all depend on one thing: having every part on site when the schedule says so. We built switchboards and control cabinets ourselves for years, so we know which lines in a BOM usually cause delays.",
          "nav": "Project supply",
-         "sec": [("What we take on", "<ul class=ticks><li>review of the project BOM and flagging of long-lead and discontinued items,</li><li>alternatives that keep the design compliant,</li><li>price optimisation across brands,</li><li>deliveries split into stages to match your schedule,</li><li>cooperation with your integrator when a system needs redesign.</li></ul>"),
+         "sec": [("What we take on", "<ul class=ticks><li>review of the project BOM and flagging of long-lead items,</li><li>alternatives that keep the design compliant,</li><li>price optimisation across brands,</li><li>deliveries split into stages to match your schedule,</li><li>cooperation with your integrator when a system needs redesign.</li></ul>"),
                  ("Who it is for", "<p>Switchboard prefabricators, automation integrators, OEMs, general contractors and plant owners, as well as distributors, resellers and procurement teams. Industries: industrial automation, switchboard prefabrication, machine building, food processing, marine, oil and gas, power generation and rail.</p>"),
                  ("Two results", "<ul class=ticks><li>Plant modernisation for an integrator: the cost of the list cut by 9.5% on average and by up to 30% on single items, complete set delivered in 4 weeks. <a href='{ref2}'>Read the case</a>.</li><li>Switchboard prefabricator, Czech Republic: Siemens S7-1200 and Phoenix Contact QUINT quoted by the makers at 6 and 8 weeks, delivered from EU stock in 48-72 hours. <a href='{ref1}'>Read the case</a>.</li></ul>")]},
   "pl": {"lead": "Prefabrykacja rozdzielnic, modernizacja zakładu czy wymiana systemów w budynku zależą od jednego: żeby każda część była na miejscu wtedy, kiedy wymaga tego harmonogram. Przez lata sami budowaliśmy rozdzielnice i szafy sterownicze, więc wiemy, które pozycje BOM najczęściej powodują opóźnienia.",
          "nav": "Dostawy projektowe",
-         "sec": [("Czym się zajmujemy", "<ul class=ticks><li>analiza projektowej listy BOM i wskazanie pozycji z długim terminem lub wycofanych,</li><li>zamienniki, przy których projekt pozostaje zgodny z wymaganiami,</li><li>optymalizacja cen między markami,</li><li>dostawy etapami, zgodnie z harmonogramem,</li><li>współpraca z integratorem, gdy system wymaga przeprojektowania.</li></ul>"),
+         "sec": [("Czym się zajmujemy", "<ul class=ticks><li>analiza projektowej listy BOM i wskazanie pozycji z długim terminem,</li><li>zamienniki, przy których projekt pozostaje zgodny z wymaganiami,</li><li>optymalizacja cen między markami,</li><li>dostawy etapami, zgodnie z harmonogramem,</li><li>współpraca z integratorem, gdy system wymaga przeprojektowania.</li></ul>"),
                  ("Dla kogo", "<p>Prefabrykatorzy rozdzielnic, integratorzy automatyki, producenci maszyn (OEM), generalni wykonawcy i właściciele zakładów, a także dystrybutorzy, resellerzy i działy zaopatrzenia. Branże: automatyka przemysłowa, prefabrykacja rozdzielnic, budowa maszyn, przemysł spożywczy, przemysł morski, ropa i gaz, energetyka i kolej.</p>"),
                  ("Dwa wyniki", "<ul class=ticks><li>Modernizacja zakładu dla integratora: koszt listy niższy średnio o 9,5%, na pojedynczych pozycjach do 30%, komplet w 4 tygodnie. <a href='{ref2}'>Zobacz realizację</a>.</li><li>Prefabrykator rozdzielnic z Czech: Siemens S7-1200 i Phoenix Contact QUINT u producentów 6 i 8 tygodni, od nas z magazynów w UE w 48-72 godziny. <a href='{ref1}'>Zobacz realizację</a>.</li></ul>")]}},
  "service_export": {
@@ -731,14 +714,14 @@ SVC = {
          "sec": [("How we ship", "{export_dl}"),
                  ("Recent destinations", "<p>Germany, France, Spain, Italy, Romania, Turkey, India, Saudi Arabia, Vietnam, the UAE, Qatar, the Philippines and Thailand.</p>"),
                  ("For buyers in the Middle East and Asia", "<p>If you are looking for a European supplier of Siemens, Schneider Electric, ABB or Phoenix Contact parts with a better lead time than you get locally, send us the list. A late delivery on an export project can mean penalties, so we tell you the real lead time per line up front.</p>"),
-                 ("Commonly shipped", "<p>PLCs, HMIs, safety relays, digital and analogue I/O modules, sensors, transmitters, power supplies, contactors, soft starters, interfaces, communication modules, connectors, and discontinued parts or their replacements.</p>")]},
+                 ("Commonly shipped", "<p>PLCs, HMIs, safety relays, digital and analogue I/O modules, sensors, transmitters, power supplies, contactors, soft starters, interfaces, communication modules and connectors.</p>")]},
   "pl": {"lead": "Gdy lista ma 50-300 pozycji, a projekt był na wczoraj, rozbijanie zamówienia na kilkunastu dostawców kosztuje czas. Sprawdzamy dostępność w całej Europie, konsolidujemy zamówienie w magazynie w Długołęce pod Wrocławiem i wysyłamy jedną dostawą.",
          "nav": "Logistyka i eksport",
          "sec": [("Jak wysyłamy", "{export_dl}"),
                  ("Dokąd ostatnio wysyłaliśmy", "<p>Niemcy, Francja, Hiszpania, Włochy, Rumunia, Turcja, Indie, Arabia Saudyjska, Wietnam, ZEA, Katar, Filipiny i Tajlandia.</p>"),
-                 ("Najczęściej wysyłane", "<p>Sterowniki PLC, panele HMI, przekaźniki bezpieczeństwa, moduły wejść/wyjść cyfrowych i analogowych, czujniki, przetworniki, zasilacze, styczniki, softstarty, interfejsy, moduły komunikacyjne, konektory oraz części wycofane z produkcji i ich zamienniki.</p>")]}},
+                 ("Najczęściej wysyłane", "<p>Sterowniki PLC, panele HMI, przekaźniki bezpieczeństwa, moduły wejść/wyjść cyfrowych i analogowych, czujniki, przetworniki, zasilacze, styczniki, softstarty, interfejsy, moduły komunikacyjne i konektory.</p>")]}},
 }
-SVC_ORDER = ["service_bom", "service_obsolete", "service_project", "service_export"]
+SVC_ORDER = ["service_bom", "service_project", "service_export"]
 
 def blog_link(key):
     for p in BLOGMOD.posts(C.lang):
@@ -772,7 +755,6 @@ def page_services(L):
         cmp_h = "Manufacturer or distributor?"
         cmp_p = "Buying direct from the manufacturer makes sense when a project needs the maker's full technical support, for example drive systems, SCADA or certified OEM applications. For prefabrication, switchboards, retrofits and export, a project distributor usually gives you more."
         blurbs = {"service_bom": "Send your bill of materials as it is. You get one quote for every line, with price, lead time and alternatives where they help.",
-                  "service_obsolete": "Discontinued PLC modules, relays, detectors or control panels. We search European stock and, where needed, propose a compatible replacement with documentation.",
                   "service_project": "Complete component packages for panel prefabrication, plant retrofits and BMS or fire system upgrades, delivered in stages if your schedule needs it.",
                   "service_export": "Consolidation at our warehouse near Wrocław, courier or pallet freight, EXW, FCA or DAP, to Europe, the US, Asia, the Middle East and Africa."}
     else:
@@ -786,7 +768,6 @@ def page_services(L):
         cmp_h = "Producent czy dystrybutor?"
         cmp_p = "Zakup bezpośrednio u producenta sprawdza się, gdy projekt wymaga pełnego wsparcia technicznego producenta, np. przy systemach napędowych, SCADA czy certyfikowanych aplikacjach OEM. Przy prefabrykacji, rozdzielnicach, retrofitach i eksporcie więcej daje zwykle dystrybutor projektowy."
         blurbs = {"service_bom": "Wyślij listę BOM w takiej postaci, w jakiej ją masz. Dostaniesz jedną ofertę na wszystkie pozycje, z ceną, terminem i zamiennikami tam, gdzie się przydadzą.",
-                  "service_obsolete": "Wycofane moduły PLC, przekaźniki, czujki czy centrale. Szukamy w magazynach w Europie, a w razie potrzeby proponujemy zgodny zamiennik z dokumentacją.",
                   "service_project": "Kompletne dostawy do prefabrykacji rozdzielnic, modernizacji zakładów oraz systemów BMS i ppoż., także etapami, jeśli tego wymaga harmonogram.",
                   "service_export": "Konsolidacja w magazynie pod Wrocławiem, kurier lub spedycja paletowa, EXW, FCA albo DAP, do Europy, USA, Azji, na Bliski Wschód i do Afryki."}
     ph = page_head(m["h1"], esc(lead), svc_crumbs())
@@ -811,7 +792,7 @@ def page_service_sub(pid, L):
     C.lang = L; C.pid = pid; C.path = P(pid, L)
     m = META[pid][L]; d = SVC[pid][L]; t = tr()
     refs = {f"ref{i+1}": rel(P("references")) + "#" + c["id"] for i, c in enumerate(CASES)}
-    fill = dict(refs, blog_bom=blog_link("bom" if L == "en" else "bom"), blog_obs=blog_link("obsolete" if L == "en" else "wycofane"), export_dl=facts_dl(export_rows()))
+    fill = dict(refs, blog_bom=blog_link("bom" if L == "en" else "bom"), export_dl=facts_dl(export_rows()))
     secs = "".join(f'<section class="subsec" aria-labelledby="h-s{i}"><h2 id="h-s{i}">{esc(h)}</h2>{c.format(**fill)}</section>' for i, (h, c) in enumerate(d["sec"]))
     side = bom_table() if d.get("aside") == "bom" else f'<figure class="svc-img">{pic(SVC[pid]["img"], "", "(max-width: 900px) 100vw, 40vw")}</figure>'
     cta_t = "Send your list" if L == "en" else "Wyślij listę"
@@ -827,12 +808,12 @@ def page_brands(L):
     C.lang = L; C.path = P("brands", L); C.pid = "brands"
     m = META["brands"][L]; t = tr()
     if L == "en":
-        lead = "Genuine products from established manufacturers only. We can combine brands in one order and propose alternatives for discontinued models."
+        lead = "Genuine products from established manufacturers only. We can combine brands in one order."
         look_h = "Looking for a specific brand?"
         look_p = "We are an independent B2B supplier. We source genuine products of these brands from European distribution and ship them worldwide, including to buyers in the Middle East and Asia. Send the part numbers and we will confirm availability and origin."
         note = "Brand names and logos belong to their owners and show the products we supply; they do not mean a partnership with the manufacturer."
     else:
-        lead = "Tylko oryginalne produkty uznanych producentów. Łączymy marki w jednym zamówieniu i proponujemy zamienniki dla wycofanych modeli."
+        lead = "Tylko oryginalne produkty uznanych producentów. Łączymy marki w jednym zamówieniu."
         look_h = "Szukasz konkretnej marki?"
         look_p = "Jesteśmy niezależnym dostawcą B2B. Oryginalne produkty tych marek kupujemy w europejskiej dystrybucji i wysyłamy na cały świat. Wyślij numery katalogowe, a potwierdzimy dostępność i pochodzenie towaru."
         note = "Nazwy i logotypy marek należą do ich właścicieli i pokazują produkty, które dostarczamy; nie oznaczają partnerstwa z producentem."
@@ -864,9 +845,9 @@ def page_products(L):
     shown = {n for _, n in LOGOS}
     rest = [b for b in BRANDS if b not in shown] + [b for b in BRANDS_EXTRA if b not in shown]
     if L == "en":
-        br_h, br_p, br_r = "Brands we supply", "Genuine products from established manufacturers. We combine brands in one order and propose alternatives for discontinued models.", "Also: "
+        br_h, br_p, br_r = "Brands we supply", "Genuine products from established manufacturers. We combine brands in one order.", "Also: "
     else:
-        br_h, br_p, br_r = "Marki, które dostarczamy", "Oryginalne produkty uznanych producentów. Łączymy marki w jednym zamówieniu i proponujemy zamienniki dla modeli wycofanych z produkcji.", "A także: "
+        br_h, br_p, br_r = "Marki, które dostarczamy", "Oryginalne produkty uznanych producentów. Łączymy marki w jednym zamówieniu.", "A także: "
     brands = f'''<section class="sec sec-panel" id="brands" aria-labelledby="h-brands">
   <div class="wrap">
     <div class="sec-head"><h2 id="h-brands">{br_h}</h2><p>{br_p}</p></div>
@@ -882,9 +863,9 @@ def page_products(L):
 
 def page_references(L):
     m = META["references"][L]; t = tr()
-    lead = ("Three supplies that show how we work: a shorter lead time for a prefabricator, a lower BOM cost for an integrator and a new concept where parts were no longer made. Client names are not published."
+    lead = ("Two supplies that show how we work: a shorter lead time for a prefabricator and a lower BOM cost for an integrator. Client names are not published."
             if L == "en" else
-            "Trzy dostawy, które pokazują, jak pracujemy: krótszy termin dla prefabrykatora, niższy koszt listy dla integratora i nowa koncepcja tam, gdzie części nie były już produkowane. Nie publikujemy nazw klientów.")
+            "Dwie dostawy, które pokazują, jak pracujemy: krótszy termin dla prefabrykatora i niższy koszt listy dla integratora. Nie publikujemy nazw klientów.")
     ph = page_head(m["h1"], esc(lead), [(t["home"], P("home")), (t["nav"][2][1], P("references"))])
     lab = {"en": ("Client", "Project", "Scope", "Brands", "Part numbers", "The situation", "What we did", "Result"),
            "pl": ("Klient", "Projekt", "Zakres", "Marki", "Kody produktów", "Sytuacja", "Co zrobiliśmy", "Efekt")}[L]
@@ -935,7 +916,7 @@ def page_contact(L):
     m = META["contact"][L]; t = tr()
     if L == "en":
         lead = f'Enter part numbers or attach your BOM file, or e-mail <a href="mailto:{EMAIL}">{EMAIL}</a>. We reply with prices, lead times and any alternatives.'
-        F = dict(subj="Subject", subj_o=["Price and availability", "BOM quote", "Obsolete or hard-to-find part", "Export delivery", "Other"],
+        F = dict(subj="Subject", subj_o=["Price and availability", "BOM quote", "Export delivery", "Other"],
                  company="Company", name="Name", email="E-mail", phone="Phone", country="Country", msg="Part numbers or message",
                  msg_ph="e.g. 6ES7212-1BE40-0XB0 - 2 pcs, LC1D09P7 - 10 pcs", file="BOM file", file_hint="xlsx, xls, csv or pdf, up to 10 MB",
                  file_btn="Choose file", file_none="No file selected",
@@ -945,7 +926,7 @@ def page_contact(L):
                  side_h="Contact details", addr_h="Warehouse and dispatch", map_t="Map: ul. Polna 29, Długołęka", map_l="Open in Google Maps", reg_h="Company")
     else:
         lead = f'Wpisz kody produktów albo dołącz plik BOM lub napisz na <a href="mailto:{EMAIL}">{EMAIL}</a>. Odpowiemy z cenami, terminami dostaw i ewentualnymi zamiennikami.'
-        F = dict(subj="Temat", subj_o=["Cena i dostępność", "Wycena listy BOM", "Część wycofana lub trudno dostępna", "Dostawa eksportowa", "Inne"],
+        F = dict(subj="Temat", subj_o=["Cena i dostępność", "Wycena listy BOM", "Dostawa eksportowa", "Inne"],
                  company="Firma", name="Imię i nazwisko", email="E-mail", phone="Telefon", country="Kraj", msg="Kody produktów lub wiadomość",
                  msg_ph="np. 6ES7212-1BE40-0XB0 - 2 szt., LC1D09P7 - 10 szt.", file="Plik BOM", file_hint="xlsx, xls, csv lub pdf, do 10 MB",
                  file_btn="Wybierz plik", file_none="Nie wybrano pliku",
@@ -1056,9 +1037,9 @@ def page_privacy(L):
 
 def page_blog_index(L):
     m = META["blog"][L]; t = tr()
-    lead = ("Practical guides on BOM sourcing, discontinued automation parts and shipping components abroad, written from our daily work with buyers and engineers."
+    lead = ("Practical guides on BOM sourcing, lead times and shipping components abroad, written from our daily work with buyers and engineers."
             if L == "en" else
-            "Praktyczne poradniki o wycenie list BOM, wycofanych komponentach automatyki i wysyłce części za granicę, pisane na podstawie codziennej pracy z zaopatrzeniem i inżynierami.")
+            "Praktyczne poradniki o wycenie list BOM, terminach dostaw i wysyłce części za granicę, pisane na podstawie codziennej pracy z zaopatrzeniem i inżynierami.")
     ph = page_head(m["h1"], esc(lead), [(t["home"], P("home")), ("Blog", P("blog"))])
     posts = BLOGMOD.posts(L)
     items = '[gpe_posts]' if WP else "".join(post_card(p) for p in posts)
@@ -1145,7 +1126,7 @@ def page_404():
 def sitemap(articles):
     urls = []
     lm = datetime.date.today().isoformat()
-    pairs = [PATHS[k] for k in ("home", "products", "brands", "services", "service_bom", "service_obsolete", "service_project", "service_export", "references", "about", "blog", "contact", "privacy")]
+    pairs = [PATHS[k] for k in ("home", "products", "brands", "services", "service_bom", "service_project", "service_export", "references", "about", "blog", "contact", "privacy")]
     pairs += [(a["en"]["path"], a["pl"]["path"]) for a in articles]
     for en_p, pl_p in pairs:
         for loc in (en_p, pl_p):
@@ -1166,9 +1147,8 @@ def sitemap(articles):
 - Quotes often within 1-6 hours; orders from about EUR 100 to BOMs worth several hundred thousand euros; Incoterms EXW, FCA, DAP; languages English, Polish, Russian
 
 ## Pages
-- [Services]({CANON}/services/): BOM sourcing, obsolete parts, project supply, logistics and export
+- [Services]({CANON}/services/): BOM sourcing, project supply, logistics and export
 - [BOM sourcing]({CANON}/services/bom-sourcing/)
-- [Obsolete and discontinued parts]({CANON}/services/obsolete-parts/)
 - [Project supply]({CANON}/services/project-supply/)
 - [Logistics and export]({CANON}/services/logistics-export/)
 - [Products]({CANON}/products/) and [brands]({CANON}/brands/)

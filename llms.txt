@@ -8,9 +8,8 @@
 - Quotes often within 1-6 hours; orders from about EUR 100 to BOMs worth several hundred thousand euros; Incoterms EXW, FCA, DAP; languages English, Polish, Russian
 
 ## Pages
-- [Services](https://gpenergia.com.pl/services/): BOM sourcing, obsolete parts, project supply, logistics and export
+- [Services](https://gpenergia.com.pl/services/): BOM sourcing, project supply, logistics and export
 - [BOM sourcing](https://gpenergia.com.pl/services/bom-sourcing/)
-- [Obsolete and discontinued parts](https://gpenergia.com.pl/services/obsolete-parts/)
 - [Project supply](https://gpenergia.com.pl/services/project-supply/)
 - [Logistics and export](https://gpenergia.com.pl/services/logistics-export/)
 - [Products](https://gpenergia.com.pl/products/) and [brands](https://gpenergia.com.pl/brands/)
@@ -22,4 +21,3 @@
 ## Blog
 - [BOM sourcing: what to include in your request to get an accurate quote fast](https://gpenergia.com.pl/blog/bom-request-for-quote-checklist/)
 - [Lead times for industrial components in 2026: how to plan purchases](https://gpenergia.com.pl/blog/industrial-component-lead-times-2026/)
-- [How to source obsolete automation components safely (and avoid counterfeits)](https://gpenergia.com.pl/blog/obsolete-automation-components-sourcing/)

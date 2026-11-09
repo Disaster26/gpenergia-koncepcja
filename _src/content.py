@@ -154,23 +154,6 @@ CASES = [
                "did": "Obniżyliśmy koszt listy średnio o 9,5%, w części pozycji do 30%, i dostarczyliśmy komplet w 4 tygodnie. Integrator utrzymał marżę i termin.",
                "res": "Koszt listy niższy o 9,5%, komplet w 4 tygodnie"},
     },
-    {
-        "id": "general-contractor-bms-fire", "img": "sprinklers",
-        "en": {"t": "General contractor, BMS and fire system upgrade",
-               "client": "General contractor", "where": "BMS and fire system modernisation", "scope": "Replacement of discontinued system components",
-               "brands": "Alarm, BMS and fire systems from 2005-2010",
-               "parts": "Discontinued relays, detectors and control panels",
-               "sit": "The design relied on relays, detectors and control panels that are no longer made: alarm, BMS and fire systems from 2005-2010.",
-               "did": "Working with an integrator in a project consortium, we proposed a new system concept that was technically compliant, ready to install and cheaper than originally planned.",
-               "res": "A new system concept instead of obsolete parts"},
-        "pl": {"t": "Generalny wykonawca, modernizacja BMS i ppoż.",
-               "client": "Generalny wykonawca", "where": "Modernizacja systemów BMS i ppoż.", "scope": "Zastąpienie wycofanych komponentów systemu",
-               "brands": "Systemy alarmowe, BMS i ppoż. z lat 2005-2010",
-               "parts": "Wycofane przekaźniki, czujniki i centrale",
-               "sit": "Projekt opierał się na wycofanych z produkcji przekaźnikach, czujnikach i centralach: systemach alarmowych, BMS i ppoż. z lat 2005-2010.",
-               "did": "Wspólnie z integratorem w konsorcjum projektowym zaproponowaliśmy nową koncepcję systemu: zgodną technicznie, gotową do wdrożenia i tańszą od pierwotnych założeń.",
-               "res": "Nowa koncepcja systemu zamiast wycofanych części"},
-    },
 ]
 
 # ---------------------------------------------------------------- history
@@ -248,11 +231,11 @@ META = {
                "h1": "Komponenty automatyki i elektrotechniki według Twojej listy BOM"},
     },
     "services": {
-        "en": {"title": "BOM sourcing, obsolete parts and export supply | GP ENERGIA",
-               "desc": "BOM sourcing for automation and electrical components, discontinued and hard-to-find parts, project supply for prefabricators and integrators, logistics and export.",
+        "en": {"title": "BOM sourcing, project supply and export | GP ENERGIA",
+               "desc": "BOM sourcing for automation and electrical components, project supply for prefabricators and integrators, logistics and export.",
                "h1": "Sourcing and supply services for automation and electrical components"},
-        "pl": {"title": "Wycena BOM, części wycofane i dostawy eksportowe | GP ENERGIA",
-               "desc": "Wycena list BOM komponentów automatyki i elektrotechniki, wyszukiwanie części wycofanych z produkcji, dostawy projektowe dla prefabrykatorów i integratorów, eksport.",
+        "pl": {"title": "Wycena BOM, dostawy projektowe i eksport | GP ENERGIA",
+               "desc": "Wycena list BOM komponentów automatyki i elektrotechniki, dostawy projektowe dla prefabrykatorów i integratorów, eksport.",
                "h1": "Sourcing i dostawy komponentów automatyki i elektrotechniki"},
     },
     "products": {
@@ -265,10 +248,10 @@ META = {
     },
     "references": {
         "en": {"title": "References: component supply projects | GP ENERGIA",
-               "desc": "Examples of our work: PLC and power supplies in 48-72 hours instead of 6-8 weeks, a BOM 9.5% cheaper for an integrator, a new concept for a BMS and fire system built on obsolete parts.",
+               "desc": "Examples of our work: PLC and power supplies in 48-72 hours instead of 6-8 weeks and a BOM 9.5% cheaper for an integrator.",
                "h1": "References"},
         "pl": {"title": "Realizacje: dostawy komponentów dla projektów | GP ENERGIA",
-               "desc": "Przykłady realizacji: sterownik i zasilacz w 48-72 godziny zamiast 6-8 tygodni, lista BOM tańsza o 9,5% dla integratora, nowa koncepcja systemu BMS i ppoż. na wycofanych częściach.",
+               "desc": "Przykłady realizacji: sterownik i zasilacz w 48-72 godziny zamiast 6-8 tygodni oraz lista BOM tańsza o 9,5% dla integratora.",
                "h1": "Realizacje"},
     },
     "about": {
@@ -281,10 +264,10 @@ META = {
     },
     "blog": {
         "en": {"title": "Blog: BOM sourcing, automation components and export | GP ENERGIA",
-               "desc": "Practical guides for buyers and engineers: how to prepare a BOM, how to replace discontinued automation parts and how to ship components abroad.",
+               "desc": "Practical guides for buyers and engineers: how to prepare a BOM, how to plan lead times and how to ship components abroad.",
                "h1": "Blog"},
         "pl": {"title": "Blog: wycena BOM, komponenty automatyki i eksport | GP ENERGIA",
-               "desc": "Praktyczne poradniki dla zaopatrzeniowców i inżynierów: jak przygotować listę BOM, czym zastąpić wycofane komponenty i jak wysyłać części za granicę.",
+               "desc": "Praktyczne poradniki dla zaopatrzeniowców i inżynierów: jak przygotować listę BOM, jak planować terminy dostaw i jak wysyłać części za granicę.",
                "h1": "Blog"},
     },
     "contact": {
@@ -319,7 +302,6 @@ PATHS = {
 # ---------------------------------------------------------------- service subpages + brands (copy from seo_0511/TEXTS.md, sales@ -> info@)
 PATHS.update({
     "service_bom": ("services/bom-sourcing/", "pl/uslugi/zaopatrzenie-wg-bom/"),
-    "service_obsolete": ("services/obsolete-parts/", "pl/uslugi/czesci-wycofane-z-produkcji/"),
     "service_project": ("services/project-supply/", "pl/uslugi/dostawy-projektowe/"),
     "service_export": ("services/logistics-export/", "pl/uslugi/logistyka-i-eksport/"),
     "brands": ("brands/", "pl/marki/"),
@@ -327,14 +309,12 @@ PATHS.update({
 for _k, _en, _pl in [
     ("service_bom", ("BOM sourcing: one quote for your whole list | GP ENERGIA", "Send your bill of materials as it is and get one quote for every line, with price, lead time and alternatives.", "BOM sourcing: one quote for your whole bill of materials"),
                     ("Wycena listy BOM: jedna oferta na całą listę | GP ENERGIA", "Wyślij listę BOM w takiej postaci, w jakiej ją masz, i dostań jedną ofertę z ceną, terminem i zamiennikami.", "Zaopatrzenie wg listy BOM: jedna oferta na całą listę")),
-    ("service_obsolete", ("Obsolete and discontinued automation parts | GP ENERGIA", "Discontinued PLC modules, relays, detectors and control panels: we search European stock or propose a compatible replacement.", "Obsolete and discontinued automation parts"),
-                         ("Części automatyki wycofane z produkcji | GP ENERGIA", "Wycofane moduły PLC, przekaźniki, czujki i centrale: szukamy w magazynach w Europie albo proponujemy zgodny zamiennik.", "Części automatyki wycofane z produkcji")),
     ("service_project", ("Project supply for panel builders and integrators | GP ENERGIA", "Complete component packages for switchboard prefabrication, plant retrofits and building system upgrades.", "Project supply for panel builders, integrators and contractors"),
                         ("Dostawy projektowe dla prefabrykatorów | GP ENERGIA", "Kompletne dostawy komponentów do prefabrykacji rozdzielnic, modernizacji zakładów i systemów w budynkach.", "Dostawy projektowe dla prefabrykatorów, integratorów i wykonawców")),
     ("service_export", ("Logistics and export of automation components | GP ENERGIA", "Consolidation near Wrocław, courier or pallet freight, EXW, FCA or DAP, deliveries to Europe, the US, Asia, the Middle East and Africa.", "Logistics and export of automation components"),
                        ("Logistyka i eksport komponentów automatyki | GP ENERGIA", "Konsolidacja pod Wrocławiem, kurier lub spedycja paletowa, EXW, FCA albo DAP, dostawy do Europy, USA, Azji i na Bliski Wschód.", "Logistyka i eksport komponentów automatyki")),
-    ("brands", ("Brands we supply: Siemens, Schneider Electric, ABB | GP ENERGIA", "Genuine products of more than 40 manufacturers, combined in one order, with alternatives for discontinued models.", "Brands we supply"),
-               ("Marki, które dostarczamy: Siemens, Schneider, ABB | GP ENERGIA", "Oryginalne produkty ponad 40 producentów w jednym zamówieniu, z zamiennikami dla wycofanych modeli.", "Marki, które dostarczamy")),
+    ("brands", ("Brands we supply: Siemens, Schneider Electric, ABB | GP ENERGIA", "Genuine products of more than 40 manufacturers, combined in one order.", "Brands we supply"),
+               ("Marki, które dostarczamy: Siemens, Schneider, ABB | GP ENERGIA", "Oryginalne produkty ponad 40 producentów w jednym zamówieniu.", "Marki, które dostarczamy")),
 ]:
     META[_k] = {"en": dict(zip(("title", "desc", "h1"), _en)), "pl": dict(zip(("title", "desc", "h1"), _pl))}
 
