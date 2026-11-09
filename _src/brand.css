@@ -270,36 +270,10 @@
 @media (max-width:389px){.top-in{gap:10px}.top .logo img{height:19px}.btn-top{padding:0 21px 0 12px;font-size:13.5px;min-height:40px}.btn-top::before{clip-path:polygon(0 0,100% 0,calc(100% - 12.2px) 100%,0 100%)}}
 
 /* =====================================================================
-   JASNA WERSJA 09.11 (uwagi klienta: "strona troche ciemna", wiecej zieleni jak Schneider Electric)
-   jasny naglowek i sekcje, zielen marki jako kolor hero, naglowkow podstron i przyciskow
+   09.11 runda 2 (Igor: "za duzo bieli"): czarny naglowek, grafitowy pas marek, ciemne sekcje i stopka jak 06.11,
+   zielen marki tylko "po srodku" - hero i naglowki podstron
    ===================================================================== */
 :root{--hero-g:linear-gradient(105deg,#0a6a2d 0%,#0e7732 48%,#128437 100%);--soft:#f2f5f3;--tx-g:#e4f2e7}
-/* header: white, graphite text, green accents */
-.util{background:var(--soft);color:var(--ink2);border-bottom:1px solid var(--line)}
-.util svg{color:var(--green-ui)}
-.util-r>a{color:var(--ink)}
-.lang a{color:var(--ink3)}
-.lang a[aria-current]{background:var(--green-ui);color:#fff}
-.lang a:not([aria-current]):hover{color:var(--ink)}
-.top{background:#fff;box-shadow:0 1px 0 var(--line)}
-.burger{color:var(--ink)}
-.top :focus-visible,.util :focus-visible{outline-color:var(--green-ui)}
-.btn-top{--bb:var(--green-ui);color:#fff}
-.btn-top:hover{--bb:var(--green-d)}
-@media (min-width:1100px){
-  .menu>a{color:var(--ink2)}
-  .menu>a:hover,.menu>a[aria-current]{color:var(--ink)}
-  .menu>a[aria-current]::after{background:var(--green)}
-}
-@media (max-width:1099px){
-  .menu.open{background-color:#fff;background-image:none;border-top-color:var(--line)}
-  .menu.open>a{color:var(--ink);border-bottom-color:var(--line)}
-  .menu.open>a[aria-current]{color:var(--green-ui)}
-  .menu-mail{color:var(--ink)}.menu-mail svg{color:var(--green-ui)}
-  .menu-extra .lang a{border-color:var(--line2);color:var(--ink2)}
-  .menu-extra .lang a[aria-current]{border-color:var(--green-ui);color:#fff}
-  .menu.open::after{background-image:var(--st-dark)}
-}
 /* hero + inner page heads: brand green with white text */
 .hero,.phead,.art-head{background-color:#0f7c34;background-image:var(--tex),var(--hero-g);color:var(--tx-g)}
 .hero .lead,.phead .lead,.art-head .lead{color:#eef7f0}
@@ -317,41 +291,10 @@
 .phead .lead a,.phead-404 .txt-link{color:#fff;text-decoration:underline}
 @media (min-width:1000px){.phead-toc{border-left-color:rgba(255,255,255,.25)}.phead-toc a{color:#fff}.phead-toc a:hover{color:var(--tx-g)}}
 @media (min-width:900px){.phead::before,.art-head::before{opacity:.1}}
-/* brands strip: light, logos as quiet graphite */
-.strip{background:#fff;border-top:0;border-bottom:1px solid var(--line)}
-.strip p{color:var(--ink3)}
-.strip-logos img{filter:brightness(0);opacity:.55}
-.strip .more{color:var(--green-ui)}
-/* former graphite sections -> light panel */
-.sec-dark,.export{background-color:var(--soft);background-image:none;color:var(--ink2)}
-.sec-dark h2,.sec-dark h3,.export h2{color:var(--ink)}
-.sec-dark p,.sec-dark li,.export p{color:var(--ink2)}
-.sec-dark a{color:var(--ink)}
-.sec-dark h2::before,.export h2::before{background-image:var(--st-dark)}
-.sec-dark .svc li::before{background-image:var(--st-dark)}
-.sec-dark .svc h3 a:hover{color:var(--green-ui)}
-.sec-dark .steps li::marker{color:var(--green)}
-.sec-dark .steps b{color:var(--ink)}
-.sec-dark .btn,.export .btn{--bb:var(--green-ui);color:#fff}
-.sec-dark .btn:hover,.export .btn:hover{--bb:var(--green-d)}
-.sec-dark :focus-visible,.export :focus-visible{outline-color:var(--green-ui)}
-.sec-dark .bomsheet{box-shadow:0 18px 40px -26px rgba(22,27,25,.35)}
-.export .facts,.export .facts>div{border-color:var(--line2)}
-.export .facts dt,.export .small{color:var(--ink3)}
-.export .facts dd{color:var(--ink)}
-/* footer: light, closes with the logo line */
-.foot{background:var(--soft);color:var(--ink2);border-top:1px solid var(--line)}
-.foot a{color:var(--ink)}
-.foot h2,.foot-slogan{color:var(--ink)!important}
-.foot-mail{color:var(--green-d)!important}
-.foot-grid::before{background:var(--rl-line) left 6px/calc(100% - 82px) 3px no-repeat,var(--rl-dash) right 0/80px 8.8px no-repeat}
-.foot-legal{border-top-color:var(--line2);color:var(--ink3)}
-.foot-last a,.foot .ck-open{color:var(--ink2)}
-.foot :focus-visible{outline-color:var(--green-ui)}
 /* offer without the obsolete-parts service: 3 services, 2 guides - grids close evenly */
 @media (min-width:960px){.svc:has(>li:nth-child(3):last-child){grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (min-width:700px){.posts:has(>li:nth-child(2):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}}
-/* logo v2 (09.11) in the white header */
+/* logo v2 (09.11) in the dark header */
 @media (min-width:390px){.top .logo img{height:26px}}
 @media (max-width:389px){.top .logo img{height:22px}}
 @media (min-width:760px){.top .logo img{height:30px}}

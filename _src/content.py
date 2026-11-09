@@ -106,7 +106,7 @@ LOGOS = [("siemens", "Siemens"), ("schneider-electric", "Schneider Electric"), (
          ("sew-eurodrive", "SEW Eurodrive"), ("fanuc", "Fanuc"), ("moxa", "Moxa"), ("hirschmann", "Hirschmann"),
          ("obo-bettermann", "OBO Bettermann"), ("spelsberg", "Spelsberg"), ("gewiss", "Gewiss"),
          ("mersen", "Mersen"), ("panasonic", "Panasonic"), ("te-connectivity", "TE Connectivity"), ("wieland", "Wieland")]
-STRIP = ["siemens", "schneider-electric", "abb", "phoenix-contact", "rittal", "eaton", "omron", "wago"]
+STRIP = ["siemens", "schneider-electric", "abb", "phoenix-contact", "rittal", "eaton", "honeywell", "wieland"]  # 09.11: Igor - zamiast WAGO i Omron
 
 # ---------------------------------------------------------------- sample BOM
 BOM = [

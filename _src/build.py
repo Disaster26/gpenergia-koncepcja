@@ -241,7 +241,7 @@ def header():
     en_p, pl_p = C.alt
     lang = (f'<a href="{rel(en_p)}" hreflang="en" lang="en"{" aria-current=" + chr(34) + "true" + chr(34) if L == "en" else ""}>EN</a>'
             f'<a href="{rel(pl_p)}" hreflang="pl" lang="pl"{" aria-current=" + chr(34) + "true" + chr(34) if L == "pl" else ""}>PL</a>')
-    lw, lh = svg_size(logo_file())
+    lw, lh = svg_size(logo_file(True))
     return f'''<body class="p-{C.pid}">
 <a class="skip" href="#main">{t["skip"]}</a>
 <div class="util">
@@ -252,7 +252,7 @@ def header():
 </div>
 <header class="top" id="top">
   <div class="wrap top-in">
-    <a class="logo" href="{rel(P("home"))}" aria-label="GP ENERGIA - {esc(t["home"])}"><img src="{asset(logo_file())}" width="{round(lw)}" height="{round(lh)}" alt="GP ENERGIA"></a>
+    <a class="logo" href="{rel(P("home"))}" aria-label="GP ENERGIA - {esc(t["home"])}"><img src="{asset(logo_file(True))}" width="{round(lw)}" height="{round(lh)}" alt="GP ENERGIA"></a>
     <nav class="menu" id="menu" aria-label="{"Main" if L == "en" else "Menu główne"}">
       {nav}
       <div class="menu-extra">
@@ -277,11 +277,11 @@ def footer():
         f'<li><a href="{rel(P("privacy"))}">{t["foot_privacy"]}</a></li>'
     en_p, pl_p = C.alt
     other = rel(pl_p if L == "en" else en_p)
-    wl, hl = svg_size(logo_file())
+    wl, hl = svg_size(logo_file(True))
     return f'''<footer class="foot">
   <div class="wrap foot-grid">
     <div class="foot-brand">
-      <a class="logo" href="{rel(P("home"))}"><img src="{asset(logo_file())}" width="{round(wl)}" height="{round(hl)}" alt="GP ENERGIA" loading="lazy"></a>
+      <a class="logo" href="{rel(P("home"))}"><img src="{asset(logo_file(True))}" width="{round(wl)}" height="{round(hl)}" alt="GP ENERGIA" loading="lazy"></a>
       <p class="foot-slogan">{SLOGAN[L]}</p>
       <p>{esc(t["foot_desc"])}</p>
     </div>
@@ -505,7 +505,8 @@ def page_home(L):
         lead = "PLC, HMI, czujniki, styczniki, zasilacze i aparatura rozdzielcza od oryginalnych producentów. Wyślij całą listę materiałową, a dostaniesz jedną ofertę z cenami, terminami i zamiennikami, z dostawą z magazynów w Europie."
         cta, strip_t = "Wyślij listę BOM", "Oryginalne produkty ponad 40 producentów, m.in."
         three = ("Dla każdej pozycji listy", [("Cena", "z magazynów w Europie"), ("Termin", "podany przy pozycji"), ("Zamiennik", "tylko gdy go dopuszczasz")])
-    strip = "".join(f'<li>{brand_img(s, n)}</li>' for s, n in LOGOS if s in STRIP)
+    _ln = dict(LOGOS)
+    strip = "".join(f'<li>{brand_img(s, _ln[s])}</li>' for s in STRIP)
     hero = f'''<section class="hero" aria-labelledby="h1">
   <div class="hero-main wrap">
     <figure class="hero-img">{pic("cabinet", CATEGORIES[0][L]["alt"], "(max-width: 860px) 100vw, 50vw", eager=True, high=True)}</figure>
