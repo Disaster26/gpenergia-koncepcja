@@ -496,12 +496,12 @@ FAQ = {"en": default_faq("en"), "pl": default_faq("pl")}
 def page_home(L):
     m = META["home"][L]
     if L == "en":
-        loc = "B2B supplier of industrial automation and electrical components · Długołęka near Wrocław, Poland"
+        loc = "Industrial automation distributor · Długołęka near Wrocław, Poland"
         lead = "PLCs, HMIs, sensors, contactors, power supplies and switchgear from the original manufacturers. Send the whole bill of materials and get one quote with prices, lead times and alternatives, shipped from European stock."
         cta, strip_t = "Send your BOM", "Genuine products from more than 40 manufacturers, including"
         three = ("For every line of your list", [("Price", "from European stock"), ("Lead time", "stated per line"), ("Alternative", "only if you allow it")])
     else:
-        loc = "Hurtowy dostawca komponentów automatyki i elektrotechniki · Długołęka k. Wrocławia"
+        loc = "Dystrybutor automatyki przemysłowej · Długołęka k. Wrocławia"
         lead = "PLC, HMI, czujniki, styczniki, zasilacze i aparatura rozdzielcza od oryginalnych producentów. Wyślij całą listę materiałową, a dostaniesz jedną ofertę z cenami, terminami i zamiennikami, z dostawą z magazynów w Europie."
         cta, strip_t = "Wyślij listę BOM", "Oryginalne produkty ponad 40 producentów, m.in."
         three = ("Dla każdej pozycji listy", [("Cena", "z magazynów w Europie"), ("Termin", "podany przy pozycji"), ("Zamiennik", "tylko gdy go dopuszczasz")])
@@ -628,12 +628,12 @@ def page_home(L):
     # company
     if L == "en":
         co_h = "In the electrical trade since 2009"
-        co_p = ["GP ENERGIA sp. z o.o. started with electrical installation work, took part in gas sector projects and spent five years prefabricating control cabinets and switchboards. Since 2022 we have focused on wholesale and sourcing of automation and electrical components, and since 2025 on export.",
+        co_p = ["GP ENERGIA sp. z o.o. started with electrical installation work, took part in gas sector projects and spent five years prefabricating control cabinets and switchboards. Since 2022 we have focused on distribution and sourcing of automation and electrical components, and since 2025 on export.",
                 "That background matters when you send a list: we know what the parts do in a cabinet, which substitutes are safe to propose and which are not."]
         co_b = "Company history"
     else:
         co_h = "W branży elektrotechnicznej od 2009 roku"
-        co_p = ["GP ENERGIA sp. z o.o. zaczynała od usług elektroinstalacyjnych, uczestniczyła w projektach dla sektora gazowego i przez pięć lat prefabrykowała szafy sterownicze i rozdzielnice. Od 2022 roku zajmujemy się handlem hurtowym i sourcingiem komponentów automatyki i elektrotechniki, a od 2025 roku także eksportem.",
+        co_p = ["GP ENERGIA sp. z o.o. zaczynała od usług elektroinstalacyjnych, uczestniczyła w projektach dla sektora gazowego i przez pięć lat prefabrykowała szafy sterownicze i rozdzielnice. Od 2022 roku zajmujemy się dystrybucją i sourcingiem komponentów automatyki i elektrotechniki, a od 2025 roku także eksportem.",
                 "To doświadczenie ma znaczenie przy każdej liście: wiemy, jaką rolę pełni dana część w szafie i który zamiennik można bezpiecznie zaproponować, a którego nie."]
         co_b = "Historia firmy"
     company = f'''<section class="sec" aria-labelledby="h-co">
